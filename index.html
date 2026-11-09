@@ -233,7 +233,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-si
         </label>
         <select id="prof" aria-label="Profunditat">
           <option value="">Qualsevol profunditat</option>
-          <option value="5">Fins a 5 m (snorkel)</option>
+          <option value="5" selected>Fins a 5 m (snorkel)</option>
           <option value="20">Fins a 20 m</option>
           <option value="40">Fins a 40 m (busseig)</option>
           <option value="999">Més enllà de 40 m</option>
@@ -485,7 +485,7 @@ function credit(x){return x.ph?`Foto: ${esc(x.ph[3])} · ${LIC[x.ph[2]]||x.ph[2]
 
 
 /* ---------- Estat i filtres ---------- */
-let state={c:'peix',u:'',q:'',prof:'',z:'',occ:false};
+let state={c:'peix',u:'',q:'',prof:'5',z:'',occ:false};
 function drawCats(){
   const n={tot:SP.length};SP.forEach(x=>n[x.c]=(n[x.c]||0)+1);
   $('#cats').innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="cat" data-c="${k}" aria-pressed="${state.c===k}">${ICONS[k]}<b>${v.n}</b><span>${n[k]} espècies</span></button>`).join('');
