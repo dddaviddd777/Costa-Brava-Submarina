@@ -1,0 +1,589 @@
+<title>Costa Brava Submarina</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: capçalera, quatre categories grans com a pestanyes, subcategories en xips, graella de fitxes amb foto; detall en panell lateral */
+:root{
+  --bg:#9ED9D4; --bg2:#CFEFEA; --surface:#FFFFFF; --ink:#0A2A2E; --muted:#45656A; --line:#B5DCD7;
+  --accent:#0B7C80; --accent-soft:#D3ECEC; --coral:#C2452D; --coral-soft:#F7DED7; --gold:#9A6B00; --gold-soft:#F5E8C6;
+  --c-peix:#0B7C80; --c-medusa:#8A4FB5; --c-alga:#3F7F2E; --c-planc:#B56A12;
+  --deep1:#BFE3E6; --deep2:#4E9DAA; --deep3:#123F52; --sea:#D2F0EC; --land:#E9E2D3; --coast:#9DB7BD;
+  --f-display:"Bricolage Grotesque",system-ui,sans-serif;
+  --f-body:"Literata",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05343A; --bg2:#0A4B52; --surface:#0C3B42; --ink:#E1F3F1; --muted:#93BFBE; --line:#1C5A60;
+  --accent:#4FC3C2; --accent-soft:#123D42; --coral:#F08A72; --coral-soft:#3B1F1A; --gold:#E6B94F; --gold-soft:#352A10;
+  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A;
+  --deep1:#1E5663; --deep2:#2D7E8D; --deep3:#9ED3DA; --sea:#0C2E39; --land:#213A36; --coast:#3E6A70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05343A; --bg2:#0A4B52; --surface:#0C3B42; --ink:#E1F3F1; --muted:#93BFBE; --line:#1C5A60;
+  --accent:#4FC3C2; --accent-soft:#123D42; --coral:#F08A72; --coral-soft:#3B1F1A; --gold:#E6B94F; --gold-soft:#352A10;
+  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A;
+  --deep1:#1E5663; --deep2:#2D7E8D; --deep3:#9ED3DA; --sea:#0C2E39; --land:#213A36; --coast:#3E6A70; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{font-size:15px;background:linear-gradient(180deg,var(--bg2) 0,var(--bg) 520px) var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+header.top{display:grid;grid-template-columns:1fr;gap:20px;align-items:end;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5vw,52px);line-height:1;margin:6px 0 8px;letter-spacing:-.02em;text-wrap:balance}
+.lede{color:var(--muted);margin:0;max-width:62ch}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{font-family:var(--f-display);font-weight:700;font-size:14px;border:0;background:none;color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tabs .n{font-family:var(--f-mono);font-weight:500;font-size:12px;opacity:.85;margin-left:4px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Categories principals */
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:22px 0 14px}
+.cat{--c:var(--ink);display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;color:var(--ink);font:inherit;position:relative;overflow:hidden}
+.cat svg{grid-row:span 2;width:34px;height:34px;color:var(--c)}
+.cat b{font-family:var(--f-display);font-weight:700;font-size:16px;line-height:1.15}
+.cat span{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.cat::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--c);opacity:0;transition:opacity .15s}
+.cat[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset}
+.cat[aria-pressed="true"]::after{opacity:1}
+.cat[data-c="peix"]{--c:var(--c-peix)}.cat[data-c="medusa"]{--c:var(--c-medusa)}.cat[data-c="alga"]{--c:var(--c-alga)}.cat[data-c="planc"]{--c:var(--c-planc)}
+.catintro{margin:0 0 14px;padding:12px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:14.5px}
+.catintro b{color:var(--ink);font-family:var(--f-display)}
+
+/* Mapa */
+.layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:22px;align-items:start}
+.mapbox{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px}
+.maphead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.maphead b{font-family:var(--f-display);font-size:16px}
+.maphead button{font-family:var(--f-mono);font-size:11.5px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.maphead button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.map{width:100%;height:auto;display:block;max-height:68vh}
+.map .sea{fill:var(--sea)}
+.map .land{fill:var(--land);stroke:var(--coast);stroke-width:2;stroke-linejoin:round}
+.map .lbl{font-family:var(--f-display);font-size:21px;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:5px;stroke-linejoin:round}
+.map .lbl.sel{font-weight:800;fill:var(--accent)}
+.map .ghost{font-family:var(--f-mono);font-size:18px;fill:var(--muted);letter-spacing:.15em}
+.map .zone{cursor:pointer}
+.map .zone circle.hit{fill:transparent}
+.map .zone circle.dot{fill:var(--surface);stroke:var(--accent);stroke-width:4}
+.map .zone.sel circle.dot{fill:var(--accent)}
+.map .zone:hover circle.dot{fill:var(--accent-soft)}
+.map .zone.sel:hover circle.dot{fill:var(--accent)}
+.map .zone:focus-visible circle.dot{stroke:var(--coral);stroke-width:6}
+.map .f3{fill:var(--accent)}.map .f2{fill:color-mix(in srgb,var(--accent) 55%,var(--surface))}.map .f1{fill:color-mix(in srgb,var(--accent) 25%,var(--surface))}
+.map .f0{fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:3 3;opacity:.6}
+.zoneinfo{font-size:13.5px;color:var(--muted);margin:0}
+.zoneinfo b{color:var(--ink);font-family:var(--f-display);font-size:15px;display:block}
+.occ{display:flex;gap:8px;align-items:center;font-size:13.5px;cursor:pointer}
+.occ input{width:18px;height:18px;accent-color:var(--accent)}
+.mapbox .occ{grid-column:1/-1}
+.mapnote{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin:0}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.legend .l3{background:var(--accent)}.legend .l2{background:color-mix(in srgb,var(--accent) 55%,var(--surface))}.legend .l1{background:color-mix(in srgb,var(--accent) 25%,var(--surface))}
+.tag.fq3{background:var(--accent);color:var(--surface)}
+.tag.fq2{background:var(--accent-soft);color:var(--accent)}
+.tag.fq1{background:var(--bg);color:var(--muted);border:1px dashed var(--line)}
+.where{display:grid;grid-template-columns:minmax(140px,190px) 1fr;gap:16px;align-items:start}
+.where .map{max-height:none}
+.where ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.where li{font-size:14px}
+.where li b{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .mapbox{position:static;grid-template-columns:minmax(0,200px) 1fr;align-items:start}
+  .mapbox .maphead,.mapbox .legend,.mapbox .mapnote{grid-column:1/-1}
+  .map{max-height:none}
+}
+@media (max-width:460px){.where{grid-template-columns:120px 1fr}.mapbox{grid-template-columns:150px 1fr}}
+
+.controls{display:grid;gap:12px;margin-bottom:6px}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap}
+.search{flex:1 1 280px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 14px}
+.search svg{flex:none;color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;padding:12px 0;outline:none}
+select{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--f-display);font-weight:500;font-size:13.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .c{font-family:var(--f-mono);font-size:11.5px;opacity:.7;margin-left:4px}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12.5px;color:var(--muted);margin:14px 0 10px}
+.banner{font-family:var(--f-mono);font-size:12.5px;color:var(--gold);background:var(--gold-soft);padding:10px 14px;border-radius:10px;margin:10px 0}
+
+.main{min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{--c:var(--c-peix);display:flex;flex-direction:column;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;color:inherit;font:inherit;padding:0;transition:transform .15s,border-color .15s}
+.card[data-c="medusa"]{--c:var(--c-medusa)}.card[data-c="alga"]{--c:var(--c-alga)}.card[data-c="planc"]{--c:var(--c-planc)}
+.card:hover{border-color:var(--c);transform:translateY(-1px)}
+.photo{position:relative;aspect-ratio:4/3;max-width:100%;background:color-mix(in srgb,var(--c) 14%,var(--surface));display:grid;place-items:center;color:var(--c);overflow:hidden}
+.photo svg{width:44px;height:44px;opacity:.7}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
+.photo img.ok{opacity:1}
+.photo .ld{position:absolute;bottom:8px;left:8px;font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.card .body{padding:12px 14px 14px;min-width:0;display:grid;gap:2px}
+.card h3{font-family:var(--f-display);font-weight:700;font-size:17px;margin:0;line-height:1.2}
+.sci{font-style:italic;color:var(--muted);font-size:13.5px}
+.es{font-size:13px;color:var(--muted)}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:var(--bg);color:var(--muted)}
+.tag.v{background:var(--coral-soft);color:var(--coral)}
+.tag.p{background:var(--gold-soft);color:var(--gold)}
+.tag.i{background:var(--coral-soft);color:var(--coral)}
+.tag.ok{background:var(--accent-soft);color:var(--accent)}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+
+/* Panell de detall */
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--deep3) 45%,transparent);z-index:20;display:flex;justify-content:flex-end}
+.sheet{--c:var(--c-peix);background:var(--surface);width:min(580px,100%);height:100%;overflow-y:auto;padding:0 0 calc(30px + env(safe-area-inset-bottom,0px));box-shadow:-20px 0 40px rgba(0,0,0,.18);animation:slide .22s ease-out}
+.sheet[data-c="medusa"]{--c:var(--c-medusa)}.sheet[data-c="alga"]{--c:var(--c-alga)}.sheet[data-c="planc"]{--c:var(--c-planc)}
+@keyframes slide{from{transform:translateX(30px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}.card{transition:none}.photo img{transition:none}}
+.sheet .hero{position:relative;aspect-ratio:16/10;max-width:100%;background:color-mix(in srgb,var(--c) 14%,var(--surface));display:grid;place-items:center;color:var(--c)}
+.sheet .hero svg{width:70px;height:70px;opacity:.6}
+.sheet .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.credit{font-family:var(--f-mono);font-size:11px;color:var(--muted);padding:6px max(20px,env(safe-area-inset-right,0px)) 0 20px}
+.credit a{color:var(--muted)}
+.close{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));border:0;background:var(--surface);color:var(--ink);border-radius:999px;width:40px;height:40px;font-size:22px;cursor:pointer;line-height:1;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.sheet .inner{padding:14px max(20px,env(safe-area-inset-right,0px)) 0 20px}
+.sheet h2{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1.05;margin:4px 0 4px;text-wrap:balance}
+.sheet .eyebrow{color:var(--c)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0}
+.facts div{background:var(--surface);padding:10px 12px;min-width:0}
+.facts dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:2px 0 0;font-family:var(--f-display);font-weight:500;font-size:14.5px;font-variant-numeric:tabular-nums}
+.sheet p{margin:0 0 12px;max-width:62ch}
+.note{border-left:3px solid var(--gold);background:var(--gold-soft);padding:10px 14px;border-radius:0 10px 10px 0;margin:14px 0}
+.note.warn{border-color:var(--coral);background:var(--coral-soft)}
+.note b{font-family:var(--f-display)}
+.h4{font-family:var(--f-display);font-weight:700;font-size:15px;margin:20px 0 8px}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{font-family:var(--f-display);font-weight:500;font-size:14px;color:var(--c);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.links a.main{background:var(--c);color:var(--surface);border-color:var(--c)}
+.links a:hover{border-color:var(--c)}
+
+form.log{display:grid;gap:10px;background:var(--bg);border-radius:12px;padding:14px}
+form.log .row{display:grid;grid-template-columns:150px 1fr;gap:10px}
+form.log label{font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:grid;gap:4px}
+form.log input,form.log textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%;min-width:0}
+form.log textarea{min-height:64px;resize:vertical}
+.btn{font-family:var(--f-display);font-weight:700;font-size:14.5px;border:0;border-radius:10px;padding:10px 16px;background:var(--accent);color:var(--surface);cursor:pointer;justify-self:start}
+.toast{font-family:var(--f-mono);font-size:12.5px;color:var(--accent)}
+.mini-list{display:grid;gap:6px;margin-top:10px}
+.mini-list div{font-size:13.5px;color:var(--muted);font-family:var(--f-mono)}
+
+/* Quadern */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat b{display:block;font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.entries{display:grid;gap:10px}
+.entry{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.entry .body{min-width:0}
+.entry h3{font-family:var(--f-display);font-size:16px;margin:0;cursor:pointer}
+.entry .when{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.entry p{margin:4px 0 0;font-size:14px;overflow-wrap:anywhere}
+.del{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);background:none;color:var(--muted);border-radius:8px;padding:5px 9px;cursor:pointer}
+.del.confirm{border-color:var(--coral);color:var(--coral)}
+.example-flag{font-family:var(--f-mono);font-size:12px;color:var(--gold);background:var(--gold-soft);padding:8px 12px;border-radius:10px;margin-bottom:12px}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (max-width:860px){.cats{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:620px){
+  header.top{grid-template-columns:1fr}
+  .cats{grid-template-columns:repeat(2,1fr)}
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .facts div:last-child:nth-child(odd){grid-column:1/-1}
+  form.log .row{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .card h3{font-size:15px}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Guia de camp · De Portbou a Blanes</div>
+      <h1>Costa Brava Submarina</h1>
+      <p class="lede">Els peixos, les meduses, les plantes i algues i el plàncton que pots trobar sota l'aigua de la Costa Brava, amb foto i enllaç a la Viquipèdia de cada espècie.</p>
+    </div>
+  </header>
+
+  <section id="view-explora">
+    <div class="cats" id="cats"></div>
+    <div class="layout">
+    <aside class="mapbox" aria-label="Mapa de la Costa Brava">
+      <div class="maphead"><b>On busques?</b><button id="allcoast" aria-pressed="true">Tota la costa</button></div>
+      <div id="mapwrap"></div>
+      <p class="zoneinfo" id="zoneinfo"></p>
+      <label class="occ" for="occ"><input type="checkbox" id="occ"> Inclou també les espècies ocasionals</label>
+      <div class="legend"><span><i class="l3"></i>Freqüent</span><span><i class="l2"></i>Habitual</span><span><i class="l1"></i>Ocasional</span></div>
+      <p class="mapnote">Freqüències orientatives, estimades segons els hàbitats de cada tram de costa i les zones protegides.</p>
+    </aside>
+    <div class="main">
+    <div class="catintro" id="catintro"></div>
+    <div class="controls">
+      <div class="searchrow">
+        <label class="search" for="q">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Cerca per nom català, castellà o científic" autocomplete="off">
+        </label>
+        <select id="prof" aria-label="Profunditat">
+          <option value="">Qualsevol profunditat</option>
+          <option value="5">Fins a 5 m (snorkel)</option>
+          <option value="20">Fins a 20 m</option>
+          <option value="40">Fins a 40 m (busseig)</option>
+          <option value="999">Més enllà de 40 m</option>
+        </select>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+        <div class="meta"><span id="count"></span><span>Toca una fitxa per veure'n el detall</span></div>
+    <div class="grid" id="grid"></div>
+    </div></div>
+  </section>
+
+  <footer>Textos redactats per a aquesta guia. Fotos d'observadors d'iNaturalist amb llicències Creative Commons o de domini públic; l'autor i la llicència de cada una surten a la fitxa.</footer>
+</div>
+
+<div class="overlay" id="overlay" hidden></div>
+
+<script>
+const ICONS={
+ peix:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 16c4-6 10-8 16-6 2 .7 3.6 2 5 3.5L29 9v14l-4-4.5c-1.4 1.5-3 2.8-5 3.5-6 2-12 0-16-6z"/><circle cx="10" cy="15" r="1.3" fill="currentColor"/></svg>',
+ medusa:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 15a11 9 0 0 1 22 0c-2 1-4 1.2-5.5 0-1.5 1.2-3.5 1.2-5.5 0-2 1.2-4 1.2-5.5 0C9 16.2 7 16 5 15z"/><path d="M10 17c0 4-2 6-1 10M16 17c0 4 1 7 0 11M22 17c0 4 2 6 1 10"/></svg>',
+ alga:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 29V10c0-3 1-5 2-7M16 22c-4-3-7-6-8-12M16 18c4-2 7-6 8-11M11 29c0-4-1-7-3-9M21 29c0-3 1-6 3-8"/></svg>',
+ planc:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="11" r="4.5"/><path d="M10 6.5v9M5.5 11h9"/><path d="M21 6l5 9h-10z" stroke-linejoin="round"/><circle cx="20" cy="23" r="5"/><circle cx="20" cy="23" r="1.6" fill="currentColor"/><circle cx="7" cy="24" r="1.5" fill="currentColor"/><circle cx="27" cy="22" r="1.2" fill="currentColor"/></svg>',
+ tot:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12c3-3 6-3 9 0s6 3 9 0 6-3 8-1M3 19c3-3 6-3 9 0s6 3 9 0 6-3 8-1M3 26c3-3 6-3 9 0s6 3 9 0 6-3 8-1"/></svg>'
+};
+const CATS={
+ tot:{n:'Tot',intro:'<b>Totes les espècies de la guia.</b> Tria una categoria per veure-la per separat.'},
+ peix:{n:'Peixos',intro:'<b>Peixos de la Costa Brava.</b> Des dels que veus fent snorkel a les cales fins als de mar obert. A les reserves de les Medes i del Cap de Creus hi veuràs les espècies grans amb més facilitat.',
+   sub:{roca:'Fons de roca',sorra:'Sorra i fang',pos:'Prats de posidònia',obert:'Mar obert',cart:'Taurons i rajades'}},
+ medusa:{n:'Meduses i gelatinosos',intro:'<b>Meduses i altres animals gelatinosos.</b> Si et pica una medusa, surt de l\'aigua, renta la zona amb aigua de mar (mai dolça), no la freguis i aplica fred embolicat. Si tens dificultat per respirar o una reacció forta, truca al 112.',
+   sub:{escifo:'Meduses',hidro:'Hidrozous flotants',cteno:'Ctenòfors',tuni:'Salpes i pirosomes'}},
+ alga:{n:'Plantes i algues',intro:'<b>Plantes marines i algues.</b> La posidònia i la cimodòcia són plantes amb flor; la resta són algues, classificades pel seu color.',
+   sub:{fanero:'Plantes amb flor',verda:'Algues verdes',bruna:'Algues brunes',vermella:'Algues vermelles'}},
+ planc:{n:'Plàncton',intro:'<b>Plàncton.</b> Organismes que van a la deriva amb els corrents. El fitoplàncton fa la fotosíntesi i és la base de la cadena alimentària; el zooplàncton són animalons que se l\'alimenten. La majoria només es veuen amb microscopi, però alguns es noten a simple vista per la llum o el color de l\'aigua.',
+   sub:{fito:'Fitoplàncton',zoo:'Zooplàncton'}}
+};
+
+/* c categoria · u subcategoria · s nom científic · ca · es · p [mín,màx] m · m mida · d descripció · x curiositat · f: v pica/verí, p protegida o amenaçada, i invasora, t tòxica · pk picada (meduses) · w títol alternatiu per a la Viquipèdia */
+const SP=[
+/* ---------- PEIXOS · ROCA ---------- */
+{c:'peix',u:'roca',s:'Thalassoma pavo',ca:'Fadrí',es:'Pez verde',p:[0,40],m:'Fins a 25 cm',d:'Llavi de colors vius que neda sense parar arran de roca. Les femelles són verdoses amb franges verticals fosques; el mascle és verd amb una banda blava i vermella darrere el cap.',x:'Fa uns anys era rar a la Costa Brava. Ara és molt comú gràcies a l\'escalfament de l\'aigua, i se\'l considera un indicador del canvi climàtic al mar.'},
+{c:'peix',u:'roca',s:'Coris julis',ca:'Donzella',es:'Doncella',p:[1,60],m:'Fins a 25 cm',d:'Llavi allargat i curiós que s\'acosta als banyistes. Les femelles són marronoses; els mascles tenen una franja ataronjada en ziga-zaga al flanc.',x:'Totes neixen femelles i les més grans es transformen en mascles. A la nit es colguen sota la sorra per dormir.'},
+{c:'peix',u:'roca',s:'Chromis chromis',ca:'Castanyola',es:'Castañuela',p:[2,40],m:'Fins a 15 cm',d:'Peix petit i fosc de cua molt forcada que forma núvols a mitja aigua sobre les roques.',x:'Els juvenils són d\'un blau elèctric. A l\'estiu els mascles netegen un tros de roca i vigilen els ous.'},
+{c:'peix',u:'roca',s:'Symphodus ocellatus',ca:'Tord ocel·lat',es:'Tordo ocelado',p:[0,30],m:'Fins a 12 cm',d:'Tord petit amb una taca rodona de colors a l\'opercle, la tapa de les brànquies.',x:'A la primavera el mascle construeix un niu d\'algues on hi ponen diverses femelles, i el defensa amb energia.'},
+{c:'peix',u:'roca',s:'Symphodus mediterraneus',ca:'Roquer',es:'Tordo',p:[1,50],m:'Fins a 15 cm',d:'Tord de tons marrons o rogencs amb una taca fosca a la base de la cua.',x:'Com altres tords, el mascle fa niu amb algues a les escletxes de roca.'},
+{c:'peix',u:'roca',s:'Labrus merula',ca:'Tord negre',es:'Merlo',p:[1,50],m:'Fins a 45 cm',d:'Tord gran, de color fosc blavós o verd oliva, que es mou entre roques i posidònia.',x:'És un dels llàbrids més grans de la costa. Té dents fortes per esmicolar crustacis i mol·luscs.'},
+{c:'peix',u:'roca',s:'Labrus viridis',ca:'Tord verd',es:'Tordo verde',p:[1,50],m:'Fins a 45 cm',d:'Tord allargat de color verd intens, que s\'amaga sovint entre la posidònia.',x:'El seu color li permet desaparèixer entre les fulles verdes del prat.',f:'p'},
+{c:'peix',u:'roca',s:'Serranus scriba',ca:'Vaca serrana',es:'Serrano',p:[1,50],m:'Fins a 30 cm',d:'Peix territorial amb dibuixos com lletres al cap i una taca blava al ventre. Es queda quiet a prop del seu forat.',x:'És hermafrodita simultani: cada individu té òrgans masculins i femenins alhora.'},
+{c:'peix',u:'roca',s:'Serranus cabrilla',ca:'Serrà',es:'Cabrilla',p:[5,200],m:'Fins a 35 cm',d:'Germà de la vaca serrana, amb franges verticals fosques i línies horitzontals al cap.',x:'També és hermafrodita simultani, cosa molt rara entre els vertebrats.'},
+{c:'peix',u:'roca',s:'Epinephelus marginatus',ca:'Nero',es:'Mero',p:[5,200],m:'Fins a 1,5 m',d:'Gran peix marró amb taques clares i boca enorme que viu en coves i escletxes. Pot passar dels 50 anys.',x:'A les illes Medes, on està protegit, s\'ha recuperat i es deixa veure de prop. És l\'estrella dels bussejadors de l\'Estartit.',f:'p'},
+{c:'peix',u:'roca',s:'Epinephelus costae',ca:'Anfós llis',es:'Falso abadejo',p:[10,200],m:'Fins a 1 m',d:'Parent del nero, de color bru daurat amb ratlles longitudinals fosques.',x:'Abans era escàs al nord de la Costa Brava. Cada vegada se\'n veuen més, també per l\'escalfament del mar.',f:'p'},
+{c:'peix',u:'roca',s:'Diplodus sargus',ca:'Sard',es:'Sargo',p:[0,50],m:'Fins a 45 cm',d:'Peix platejat amb franges verticals fosques i una taca negra a la base de la cua. Viu a les roques amb onatge.',x:'Té dents davanteres com incisius que fa servir per arrencar mol·luscs i eriçons.'},
+{c:'peix',u:'roca',s:'Diplodus vulgaris',ca:'Variada',es:'Mojarra',p:[0,60],m:'Fins a 40 cm',d:'Espàrid platejat amb dues bandes negres: una al clatell i una a la base de la cua.',x:'Sovint va en bancs mixtos amb sards i altres espàrids.'},
+{c:'peix',u:'roca',s:'Diplodus puntazzo',ca:'Morruda',es:'Sargo picudo',p:[0,60],m:'Fins a 60 cm',d:'Espàrid de musell punxegut i franges verticals, amb una taca negra a la cua.',x:'El musell allargat li permet arrencar petits animals de les escletxes.'},
+{c:'peix',u:'roca',s:'Diplodus cervinus',ca:'Sard reial',es:'Sargo real',p:[5,80],m:'Fins a 55 cm',d:'El sard més vistós, amb cinc bandes verticals fosques i amples i llavis gruixuts.',x:'És menys comú que els altres sards. Sol veure\'s en zones protegides com les Medes.'},
+{c:'peix',u:'roca',s:'Diplodus annularis',ca:'Esparrall',es:'Raspallón',p:[0,50],m:'Fins a 20 cm',d:'Sard petit amb un anell negre a la base de la cua i aletes ventrals grogues.',x:'És el sard més petit i el més lligat a la posidònia.'},
+{c:'peix',u:'roca',s:'Oblada melanura',ca:'Oblada',es:'Oblada',p:[0,30],m:'Fins a 30 cm',d:'Peix platejat que neda en grups a mitja aigua, amb una taca negra envoltada de blanc a la base de la cua.',x:'Té els ulls grossos i és desconfiat. Puja a la superfície quan l\'aigua està remenada.'},
+{c:'peix',u:'roca',s:'Sparus aurata',ca:'Orada',es:'Dorada',p:[0,30],m:'Fins a 70 cm',d:'Espàrid platejat amb una franja daurada entre els ulls, com unes ulleres.',x:'Té unes dents molars molt fortes que trenquen musclos i petxines.'},
+{c:'peix',u:'roca',s:'Spondyliosoma cantharus',ca:'Càntera',es:'Chopa',p:[5,100],m:'Fins a 50 cm',d:'Espàrid de color gris argentat amb línies longitudinals fines.',x:'El mascle excava un clot a la sorra on la femella pon els ous, i després els guarda.'},
+{c:'peix',u:'roca',s:'Boops boops',ca:'Boga',es:'Boga',p:[0,100],m:'Fins a 30 cm',d:'Peix allargat i platejat amb ratlles daurades, que forma bancs nombrosos.',x:'És un dels peixos més abundants de la costa i menja gairebé de tot.'},
+{c:'peix',u:'roca',s:'Spicara maena',ca:'Xucla',es:'Chucla',p:[5,100],m:'Fins a 25 cm',d:'Peix gris blavós amb una taca fosca al flanc, que va en grups sobre roques i posidònia.',x:'A l\'estiu el mascle es torna blavós i excava nius a la sorra.'},
+{c:'peix',u:'roca',s:'Dentex dentex',ca:'Déntol',es:'Dentón',p:[10,200],m:'Fins a 1 m',d:'Gran espàrid depredador, rosat amb punts blavosos i ullals potents.',x:'Caça peixos petits als caps rocosos. És un dels grans depredadors de les Medes.'},
+{c:'peix',u:'roca',s:'Sciaena umbra',ca:'Corball',es:'Corvallo',p:[3,200],m:'Fins a 70 cm',d:'Peix bru daurat amb aletes vorejades de negre i blanc, que es mou lent en petits grups entre les roques.',x:'Produeix sons amb la bufeta natatòria. És una espècie vulnerable.',f:'p'},
+{c:'peix',u:'roca',s:'Scorpaena scrofa',ca:'Cap-roig',es:'Cabracho',p:[20,500],m:'Fins a 50 cm',d:'Peix vermellós de cap gros ple de pellingots, que espera immòbil les preses.',x:'Les espines de les aletes tenen verí. És molt apreciat per al suquet.',f:'v'},
+{c:'peix',u:'roca',s:'Scorpaena porcus',ca:'Escórpora',es:'Rascacio',p:[0,40],m:'Fins a 30 cm',d:'Germana petita del cap-roig, de colors bruns, molt comuna a poca fondària.',x:'Està tan ben camuflada que sovint només la veus quan es mou. Té espines verinoses.',f:'v'},
+{c:'peix',u:'roca',s:'Muraena helena',ca:'Morena',es:'Morena',p:[1,80],m:'Fins a 1,5 m',d:'Peix serpentiforme fosc amb taques clares que treu el cap pels forats.',x:'Obre i tanca la boca per respirar, no per amenaçar. No hi acostis la mà: mossega fort.',f:'v'},
+{c:'peix',u:'roca',s:'Conger conger',ca:'Congre',es:'Congrio',p:[5,500],m:'Fins a 3 m',d:'Peix allargat de color gris que de dia s\'amaga en coves i esculls.',x:'Es reprodueix a gran fondària una sola vegada a la vida.'},
+{c:'peix',u:'roca',s:'Phycis phycis',ca:'Mòllera de roca',es:'Brótola de roca',p:[10,300],m:'Fins a 60 cm',d:'Peix bru de cos tou amb unes aletes ventrals en forma de filament.',x:'És nocturn i de dia s\'amaga a les coves. Fa servir els filaments per palpar el fons.'},
+{c:'peix',u:'roca',s:'Apogon imberbis',ca:'Peix rei',es:'Salmonete real',p:[5,200],m:'Fins a 15 cm',d:'Peix petit de color vermell ataronjat i ulls molt grossos, que viu a l\'entrada de les coves.',x:'El mascle incuba els ous dins la boca fins que neixen.'},
+{c:'peix',u:'roca',s:'Anthias anthias',ca:'Anthias',es:'Tres colas',p:[25,300],m:'Fins a 25 cm',d:'Peix rosat i groc de cua molt forcada, que forma grups davant les parets fondes.',x:'Sovint és la primera espècie de colors que veuen els bussejadors a les parets profundes de les Medes.'},
+{c:'peix',u:'roca',s:'Tripterygion delaisi',ca:'Tres-aletes groc',es:'Moma amarilla',p:[3,50],m:'Fins a 9 cm',d:'Peix diminut amb tres aletes dorsals que viu en parets ombrívoles.',x:'En època de cria el mascle es torna groc intens amb el cap negre.'},
+{c:'peix',u:'roca',s:'Parablennius gattorugine',ca:'Bavosa',es:'Cabruza',p:[1,30],m:'Fins a 30 cm',d:'Peix de pell nua i sense escates, marró amb franges, que treu el cap pels forats.',x:'Té uns petits tentacles ramificats sobre els ulls, com unes celles.'},
+{c:'peix',u:'roca',s:'Gobius cruentatus',ca:'Gobi de boca vermella',es:'Gobio de boca roja',p:[1,40],m:'Fins a 18 cm',d:'Gòbit amb taques i els llavis vermells, que reposa sobre el fons recolzat en les aletes.',x:'Les aletes ventrals soldades formen una ventosa per aguantar-se al fons.'},
+{c:'peix',u:'roca',s:'Mullus surmuletus',ca:'Moll de roca',es:'Salmonete de roca',p:[1,100],m:'Fins a 40 cm',d:'Peix rosat amb ratlles grogues que remena la sorra amb dos barbellons.',x:'Sovint el segueixen altres peixos per aprofitar els animalons que desenterra.'},
+{c:'peix',u:'roca',s:'Chelon labrosus',ca:'Llissa',es:'Lisa',p:[0,20],m:'Fins a 60 cm',d:'Peix grisós de llavis gruixuts que neda en grups a tocar de la superfície, també als ports.',x:'S\'alimenta rascant la pel·lícula d\'algues que cobreix roques i fons.'},
+{c:'peix',u:'roca',s:'Atherina hepsetus',ca:'Moixó',es:'Pejerrey',p:[0,20],m:'Fins a 20 cm',d:'Peix petit i translúcid amb una franja platejada al flanc, en bancs arran de superfície.',x:'Forma bancs enormes a les cales a l\'estiu, i sovint és el que veus des de les roques.'},
+
+/* ---------- PEIXOS · SORRA ---------- */
+{c:'peix',u:'sorra',s:'Trachinus draco',ca:'Aranya blanca',es:'Araña',p:[1,150],m:'Fins a 40 cm',d:'Peix allargat que es colga a la sorra deixant només els ulls fora.',x:'Les espines de la primera aleta dorsal i de l\'opercle tenen un verí molt dolorós. Si et punxa, posa la zona en aigua tan calenta com puguis aguantar i ves al socorrista.',f:'v'},
+{c:'peix',u:'sorra',s:'Echiichthys vipera',ca:'Aranyó',es:'Salvariego',p:[0,50],m:'Fins a 15 cm',d:'Aranya petita que viu a la sorra de la vora, on fan peu els banyistes.',x:'És la que més punxades provoca a les platges. Si camines per sorra, arrossega els peus.',f:'v'},
+{c:'peix',u:'sorra',s:'Uranoscopus scaber',ca:'Rata',es:'Rata',p:[10,400],m:'Fins a 35 cm',d:'Peix de cap gros i ulls mirant cap amunt que espera colgat a la sorra.',x:'Té una llengüeta a la boca que fa servir d\'esquer, i una espina verinosa darrere l\'opercle.',f:'v'},
+{c:'peix',u:'sorra',s:'Xyrichtys novacula',ca:'Raor',es:'Raor',p:[1,80],m:'Fins a 30 cm',d:'Llavi de perfil del cap molt vertical i cos rosat que viu sobre sorra neta.',x:'Quan s\'espanta es capbussa dins la sorra de cap en un instant.'},
+{c:'peix',u:'sorra',s:'Lithognathus mormyrus',ca:'Mabre',es:'Herrera',p:[0,50],m:'Fins a 40 cm',d:'Espàrid platejat amb unes quinze franges verticals fosques, que pastura sobre la sorra.',x:'Remena el fons de sorra a la vora de les platges, sovint en grups.'},
+{c:'peix',u:'sorra',s:'Pagellus erythrinus',ca:'Pagell',es:'Breva',p:[10,200],m:'Fins a 50 cm',d:'Espàrid rosat amb punts blaus, de fons de sorra i fang.',x:'Neix femella i passa a mascle de gran.'},
+{c:'peix',u:'sorra',s:'Bothus podas',ca:'Pedaç',es:'Podas',p:[1,50],m:'Fins a 45 cm',d:'Peix pla amb tots dos ulls al costat esquerre, amb taques clares que imiten la sorra.',x:'De petit neda com qualsevol peix; després un ull emigra a l\'altre costat del cap.'},
+{c:'peix',u:'sorra',s:'Solea solea',ca:'Llenguado',es:'Lenguado',p:[0,150],m:'Fins a 60 cm',d:'Peix pla i ovalat, amb els ulls al costat dret, que es colga a la sorra.',x:'És nocturn i troba el menjar sobretot per l\'olfacte.'},
+{c:'peix',u:'sorra',s:'Trachinotus ovatus',ca:'Palometa',es:'Palometa blanca',p:[0,50],m:'Fins a 60 cm',d:'Peix platejat i aplanat que neda en grups prop de les platges.',x:'Les puntes negres de les aletes el fan fàcil de reconèixer.'},
+{c:'peix',u:'sorra',s:'Lophius piscatorius',ca:'Rap',es:'Rape',p:[20,1000],m:'Fins a 2 m',d:'Peix aplanat de boca gegant que viu sobre fons tous, gairebé invisible.',x:'Té una espina sobre el cap que fa servir de canya de pescar amb esquer.'},
+
+/* ---------- PEIXOS · POSIDÒNIA ---------- */
+{c:'peix',u:'pos',s:'Hippocampus guttulatus',ca:'Cavall marí',es:'Caballito de mar',p:[1,20],m:'Fins a 18 cm',d:'Peix vertical de cua prènsil que s\'agafa a les fulles de la posidònia o a les algues.',x:'Són els mascles els que porten els ous en una bossa ventral fins que neixen.',f:'p'},
+{c:'peix',u:'pos',s:'Hippocampus hippocampus',ca:'Cavall marí de musell curt',es:'Caballito de hocico corto',p:[1,30],m:'Fins a 15 cm',d:'Cavall marí de musell curt i sense crestes al cap, de fons de sorra i prats.',x:'És més escàs que l\'altre cavall marí. Si en veus un, no el toquis ni el moguis.',f:'p'},
+{c:'peix',u:'pos',s:'Syngnathus typhle',ca:'Agulla de posidònia',es:'Aguja mula',p:[0,20],m:'Fins a 35 cm',d:'Parent del cavall marí, prim com una fulla, que es confon amb la posidònia.',x:'Es posa vertical i es balanceja amb les fulles per passar desapercebut.'},
+{c:'peix',u:'pos',s:'Sarpa salpa',ca:'Saupa',es:'Salema',p:[0,20],m:'Fins a 45 cm',d:'Peix ovalat amb unes deu línies daurades al llarg del cos, en bancs que pasturen posidònia i algues.',x:'Menjar-ne el cap o les vísceres pot provocar al·lucinacions per les toxines de les algues que consumeix.',f:'t'},
+{c:'peix',u:'pos',s:'Symphodus tinca',ca:'Tord flassader',es:'Peto',p:[0,50],m:'Fins a 35 cm',d:'Tord gros de colors variables amb punts vermells i blaus, comú a posidònia i roca.',x:'Els mascles a l\'estiu fan nius d\'alga com els altres tords.'},
+
+/* ---------- PEIXOS · MAR OBERT ---------- */
+{c:'peix',u:'obert',s:'Sardina pilchardus',ca:'Sardina',es:'Sardina',p:[0,100],m:'Fins a 25 cm',d:'Peix blau platejat que forma bancs enormes a mar obert.',x:'És una de les bases de la pesca catalana. S\'alimenta de plàncton.'},
+{c:'peix',u:'obert',s:'Engraulis encrasicolus',ca:'Seitó',es:'Boquerón',p:[0,150],m:'Fins a 20 cm',d:'Peix petit, prim i platejat amb una franja blava, en bancs a mar obert.',x:'L\'anxova de l\'Escala és seitó salat, una tradició de la Costa Brava.'},
+{c:'peix',u:'obert',s:'Scomber scombrus',ca:'Verat',es:'Caballa',p:[0,200],m:'Fins a 50 cm',d:'Peix blau verdós amb ratlles fosques ondulades a l\'esquena.',x:'No té bufeta natatòria, per això ha de nedar sense parar.'},
+{c:'peix',u:'obert',s:'Sarda sarda',ca:'Bonítol',es:'Bonito',p:[0,200],m:'Fins a 90 cm',d:'Túnid de dors blau amb ratlles obliqües fosques.',x:'Arriba a la costa en bancs, caçant sardines i seitons.'},
+{c:'peix',u:'obert',s:'Thunnus thynnus',ca:'Tonyina vermella',es:'Atún rojo',p:[0,500],m:'Fins a 3 m',d:'Gran peix migrador i un dels nedadors més ràpids del mar.',x:'Ve al Mediterrani a fresar. Després de dècades de sobrepesca, les quotes han ajudat a recuperar-la.',f:'p'},
+{c:'peix',u:'obert',s:'Seriola dumerili',ca:'Círvia',es:'Pez limón',p:[5,300],m:'Fins a 1,8 m',d:'Depredador platejat amb una franja daurada al flanc, que passa en grups vora els caps.',x:'S\'acosta als bussejadors per curiositat i a les Medes es veu sovint.'},
+{c:'peix',u:'obert',s:'Sphyraena viridensis',ca:'Espet',es:'Espetón',p:[0,100],m:'Fins a 1,2 m',d:'Barracuda mediterrània, allargada i platejada, que forma bancs quiets a mitja aigua.',x:'És una espècie d\'aigües càlides cada vegada més present a la Costa Brava.'},
+{c:'peix',u:'obert',s:'Belone belone',ca:'Agulla',es:'Aguja',p:[0,20],m:'Fins a 90 cm',d:'Peix molt prim amb unes mandíbules llarguíssimes en forma de bec.',x:'Té les espines de color verd, també un cop cuinada.'},
+{c:'peix',u:'obert',s:'Coryphaena hippurus',ca:'Llampuga',es:'Lampuga',p:[0,80],m:'Fins a 1,5 m',d:'Peix d\'alta mar daurat i verd, amb el front molt alt en els mascles.',x:'Arriba a finals d\'estiu i busca l\'ombra de qualsevol objecte que suri.'},
+{c:'peix',u:'obert',s:'Mola mola',ca:'Bot',es:'Pez luna',p:[0,600],m:'Fins a 3 m',d:'Peix enorme i aplanat que sembla només un cap amb aletes. De vegades es posa de costat a la superfície.',x:'És el peix ossi més pesant del món i menja sobretot meduses.'},
+
+/* ---------- PEIXOS · TAURONS I RAJADES ---------- */
+{c:'peix',u:'cart',s:'Scyliorhinus canicula',ca:'Gat',es:'Pintarroja',p:[10,400],m:'Fins a 80 cm',d:'Tauró petit, de color clar amb moltes taques fosques, que viu al fons.',x:'Pon ous en una càpsula amb filaments que s\'enganxen a les algues.'},
+{c:'peix',u:'cart',s:'Prionace glauca',ca:'Tauró blau',es:'Tintorera',p:[0,350],m:'Fins a 3 m',d:'Tauró esvelt de color blau intens, d\'alta mar.',x:'Rarament s\'acosta a la costa. És una espècie amenaçada per la pesca.',f:'p'},
+{c:'peix',u:'cart',s:'Dasyatis pastinaca',ca:'Escurçana',es:'Pastinaca',p:[2,200],m:'Fins a 1,4 m amb la cua',d:'Rajada en forma de diamant i cua llarga, que reposa colgada a la sorra.',x:'Té un fibló verinós a la cua. Si camines per sorra, arrossega els peus perquè marxi.',f:'v'},
+{c:'peix',u:'cart',s:'Torpedo marmorata',ca:'Tremolosa',es:'Tembladera',p:[5,200],m:'Fins a 60 cm',d:'Peix aplanat i arrodonit amb un marbrejat marró, que es colga a la sorra.',x:'Pot fer descàrregues elèctriques per atordir les preses i defensar-se.',f:'v'},
+{c:'peix',u:'cart',s:'Myliobatis aquila',ca:'Milà',es:'Águila marina',p:[1,300],m:'Fins a 1,5 m d\'ample',d:'Rajada de cap destacat i aletes com ales, que vola per l\'aigua.',x:'Remena la sorra amb el morro per trobar petxines. També té un fibló a la cua.',f:'v'},
+{c:'peix',u:'cart',s:'Raja clavata',ca:'Rajada de clau',es:'Raya de clavos',p:[10,300],m:'Fins a 1 m',d:'Rajada de fons de sorra amb punxes grosses a l\'esquena i la cua.',x:'Els ous són les "bossetes de sirena" negres que trobes de vegades a la platja.'},
+
+/* ---------- MEDUSES I GELATINOSOS ---------- */
+{c:'medusa',u:'escifo',s:'Pelagia noctiluca',ca:'Medusa luminescent',es:'Medusa luminiscente',p:[0,300],m:'Campana fins a 10 cm',d:'Medusa rosada amb berrugues a la campana i tentacles llargs. És la més comuna a la Costa Brava.',x:'Fa llum quan es mou de nit. És la que provoca més picades a les platges catalanes.',f:'v',pk:'Forta'},
+{c:'medusa',u:'escifo',s:'Rhizostoma pulmo',ca:'Borm',es:'Aguamala',p:[0,30],m:'Campana fins a 60 cm',d:'Medusa gran, blanquinosa, amb la vora de la campana blau violeta i braços gruixuts.',x:'Sovint hi viuen peixets refugiats entre els braços.',f:'v',pk:'Lleu'},
+{c:'medusa',u:'escifo',s:'Cotylorhiza tuberculata',ca:'Ou ferrat',es:'Huevo frito',p:[0,20],m:'Fins a 35 cm',d:'Medusa amb una cúpula groguenca al centre que la fa semblar un ou ferrat.',x:'Abunda a finals d\'estiu i és pràcticament inofensiva.',pk:'Gairebé inofensiva'},
+{c:'medusa',u:'escifo',s:'Aurelia aurita',ca:'Medusa lluna',es:'Medusa luna',p:[0,50],m:'Fins a 40 cm',d:'Medusa translúcida en forma de plat, amb quatre anelles violetes al centre.',x:'Les anelles són les gònades. Abunda als ports i badies tancades.',pk:'Lleu'},
+{c:'medusa',u:'escifo',s:'Chrysaora hysoscella',ca:'Medusa de brúixola',es:'Acalefo radiado',p:[0,50],m:'Fins a 30 cm',d:'Medusa amb setze franges marrons que surten del centre, com una rosa dels vents.',x:'Pot canviar de sexe al llarg de la seva vida.',f:'v',pk:'Moderada'},
+{c:'medusa',u:'escifo',s:'Carybdea marsupialis',ca:'Cubomedusa',es:'Avispa de mar',p:[0,20],m:'Campana fins a 5 cm',d:'Medusa petita i transparent en forma de cub, amb quatre tentacles.',x:'És més habitual al País Valencià i les Balears, però de vegades se\'n troba més al nord. La picada és molt dolorosa.',f:'v',pk:'Forta'},
+{c:'medusa',u:'escifo',s:'Aequorea forskalea',ca:'Medusa de cristall',es:'Medusa de cristal',p:[0,50],m:'Fins a 20 cm',d:'Medusa aplanada, transparent, amb molts canals radials fins.',x:'Una parenta seva va servir per descobrir la proteïna fluorescent verda, premiada amb el Nobel.',w:{en:'Aequorea forskalea'},pk:'Lleu'},
+{c:'medusa',u:'hidro',s:'Physalia physalis',ca:'Caravel·la portuguesa',es:'Carabela portuguesa',p:[0,0],m:'Flotador de 30 cm; tentacles de metres',d:'Colònia amb un flotador blau violeta que navega a la superfície. No és una medusa.',x:'És molt perillosa i no és habitual a la Costa Brava. No la toquis ni encara que sembli morta a la sorra.',f:'v',pk:'Molt forta'},
+{c:'medusa',u:'hidro',s:'Velella velella',ca:'Vel·lela',es:'Velero',p:[0,0],m:'Fins a 7 cm',d:'Disc blau amb una petita vela transparent que el vent arrossega per la superfície.',x:'A la primavera n\'arriben milers a les platges i formen franges blaves a la sorra.',pk:'Inofensiva'},
+{c:'medusa',u:'hidro',s:'Porpita porpita',ca:'Botó blau',es:'Botón azul',p:[0,0],m:'Fins a 5 cm',d:'Disc daurat envoltat de tentacles blaus que sura a la superfície.',x:'Igual que la vel·lela, és una colònia d\'hidrozous, no una medusa.',pk:'Lleu'},
+{c:'medusa',u:'cteno',s:'Mnemiopsis leidyi',ca:'Nou de mar',es:'Nuez de mar',p:[0,30],m:'Fins a 10 cm',d:'Ctenòfor transparent i ovalat amb fileres de pestanyes que fan irisacions de colors.',x:'És invasor, arribat de l\'Atlàntic americà. Els ctenòfors no piquen.',f:'i',pk:'No pica'},
+{c:'medusa',u:'cteno',s:'Beroe ovata',ca:'Beroe',es:'Beroe',p:[0,50],m:'Fins a 15 cm',d:'Ctenòfor en forma de sac, rosat i transparent, amb una boca molt ampla.',x:'S\'alimenta d\'altres ctenòfors, com la nou de mar.',pk:'No pica'},
+{c:'medusa',u:'cteno',s:'Leucothea multicornis',ca:'Leucotea',es:'Leucotea',p:[0,30],m:'Fins a 25 cm',d:'Ctenòfor gran i transparent amb dos lòbuls i molts petits apèndixs taronges.',x:'És fràgil com una bombolla de sabó i es desfà si el toques.',w:{en:'Leucothea multicornis'},pk:'No pica'},
+{c:'medusa',u:'tuni',s:'Salpa maxima',ca:'Salpa',es:'Salpa',p:[0,100],m:'Fins a 15 cm, en cadenes de metres',d:'Animal gelatinós en forma de barril que forma llargues cadenes a la deriva.',x:'Tot i semblar una medusa, està més emparentat amb els vertebrats.',w:{ca:'Salpa',es:'Salpa',en:'Salpa maxima'},pk:'No pica'},
+{c:'medusa',u:'tuni',s:'Pyrosoma atlanticum',ca:'Pirosoma',es:'Pirosoma',p:[0,500],m:'Fins a 60 cm',d:'Colònia en forma de tub, rosada, formada per milers d\'individus.',x:'Fa una llum intensa quan se\'l toca. El nom vol dir "cos de foc".',pk:'No pica'},
+
+/* ---------- PLANTES I ALGUES ---------- */
+{c:'alga',u:'fanero',s:'Posidonia oceanica',ca:'Posidònia',es:'Posidonia',p:[0,40],m:'Fulles fins a 1 m',d:'Planta amb flors endèmica del Mediterrani, no una alga. Forma prats submarins plens de vida.',x:'Creix molt a poc a poc. Els prats produeixen oxigen, protegeixen les platges de l\'erosió i fan de viver. Les fulles mortes a la platja també la protegeixen.',f:'p'},
+{c:'alga',u:'fanero',s:'Cymodocea nodosa',ca:'Alga de les nanses',es:'Seba',p:[0,30],m:'Fulles fins a 40 cm',d:'Planta marina de fulles estretes que creix sobre fons de sorra poc fonda.',x:'Com la posidònia, és una planta amb flors i rizomes, no una alga.',f:'p'},
+{c:'alga',u:'verda',s:'Acetabularia acetabulum',ca:'Paraigüet',es:'Sombrerillo de mar',p:[0,20],m:'Fins a 6 cm',d:'Alga verda petita en forma de paraigua, en grups sobre pedres.',x:'Tot l\'organisme és una sola cèl·lula gegant.'},
+{c:'alga',u:'verda',s:'Halimeda tuna',ca:'Halimeda',es:'Alga moneda',p:[1,70],m:'Fins a 15 cm',d:'Alga verda formada per segments plans com monedes enfilades.',x:'Els segments estan calcificats i, en morir, formen sorra.'},
+{c:'alga',u:'verda',s:'Codium bursa',ca:'Pilota de mar',es:'Bola de mar',p:[1,40],m:'Fins a 30 cm',d:'Alga verda fosca en forma de bola esponjosa.',x:'Per dins és buida i plena d\'aigua; amb els anys pot créixer molt.'},
+{c:'alga',u:'verda',s:'Ulva lactuca',ca:'Enciam de mar',es:'Lechuga de mar',p:[0,10],m:'Fins a 30 cm',d:'Alga verda brillant, fina com un paper, a les roques de la vora.',x:'És comestible i abunda on hi ha molts nutrients, com a prop dels ports.'},
+{c:'alga',u:'verda',s:'Caulerpa cylindracea',ca:'Caulerpa',es:'Caulerpa',p:[0,60],m:'Estolons de metres',d:'Alga verda amb branquetes acabades en petites boles, que s\'estén com una catifa.',x:'És invasora, d\'origen australià, i cobreix fons sencers desplaçant les espècies locals.',f:'i'},
+{c:'alga',u:'bruna',s:'Padina pavonica',ca:'Padina',es:'Abanico de mar',p:[0,20],m:'Fins a 10 cm',d:'Alga bruna en forma de ventall amb bandes concèntriques blanquinoses.',x:'Les franges clares són calç dipositada a la superfície.'},
+{c:'alga',u:'bruna',s:'Dictyota dichotoma',ca:'Dictiota',es:'Dictiota',p:[0,40],m:'Fins a 20 cm',d:'Alga bruna de cintes planes que es divideixen en dos una vegada i una altra.',x:'Sota l\'aigua sovint té reflexos blaus iridescents.'},
+{c:'alga',u:'bruna',s:'Sargassum vulgare',ca:'Sargàs',es:'Sargazo',p:[1,30],m:'Fins a 50 cm',d:'Alga bruna ramificada amb petites boles que fan de flotadors.',x:'Les boles plenes de gas aguanten l\'alga dreta dins l\'aigua.'},
+{c:'alga',u:'bruna',s:'Ericaria amentacea',ca:'Cistoseira',es:'Cistoseira',p:[0,2],m:'Fins a 30 cm',d:'Alga bruna arbustiva que forma un cinturó a la franja de l\'onatge en costes netes.',x:'Només viu en aigües poc contaminades, i per això és un bon indicador de la qualitat de l\'aigua.',w:{en:'Ericaria amentacea'},f:'p'},
+{c:'alga',u:'vermella',s:'Ellisolandia elongata',ca:'Coral·lina',es:'Coralina',p:[0,20],m:'Fins a 10 cm',d:'Alga vermella calcària formada per segments rígids, en catifes a la roca.',x:'En morir es torna blanca. Fa de refugi a una multitud d\'animalons.',w:{en:'Ellisolandia elongata'}},
+{c:'alga',u:'vermella',s:'Lithophyllum byssoides',ca:'Cornisa de Lithophyllum',es:'Acera de Lithophyllum',p:[0,1],m:'Cornises de fins a 2 m',d:'Alga vermella calcària que construeix voreres a la franja de marea de les costes rocoses.',x:'Les cornises grans tenen segles. Al Cap de Creus n\'hi ha de molt ben conservades.',f:'p'},
+{c:'alga',u:'vermella',s:'Peyssonnelia squamaria',ca:'Peissonèlia',es:'Peyssonnelia',p:[5,100],m:'Fins a 15 cm',d:'Alga vermella en forma de làmines arrodonides enganxades a la roca ombrívola.',x:'És típica del coral·ligen, el fons de roca fosca on viuen les gorgònies.',w:{en:'Peyssonnelia squamaria'}},
+{c:'alga',u:'vermella',s:'Asparagopsis armata',ca:'Asparagopsis',es:'Asparagopsis',p:[0,30],m:'Fins a 20 cm',d:'Alga vermella rosada, plomosa, amb ganxos amb què s\'enganxa a altres algues.',x:'És invasora, arribada de l\'hemisferi sud. S\'investiga com a complement alimentari per reduir el metà que fan les vaques.',f:'i'},
+
+/* ---------- PLÀNCTON ---------- */
+{c:'planc',u:'fito',s:'Noctiluca scintillans',ca:'Noctiluca',es:'Noctiluca',p:[0,10],m:'Fins a 2 mm',d:'Dinoflagel·lat gros i rodó, que es veu a simple vista quan n\'hi ha molts.',x:'És el responsable del mar que brilla de nit amb llum blava quan es mou l\'aigua. De dia pot tenyir el mar de color rosat.'},
+{c:'planc',u:'fito',s:'Ostreopsis ovata',ca:'Ostreopsis',es:'Ostreopsis',p:[0,5],m:'Microscòpic',d:'Microalga que creix sobre les algues de les cales a l\'estiu, sovint formant una capa marronosa.',x:'Quan prolifera pot irritar els ulls i les vies respiratòries dels banyistes. A Catalunya se\'n fa seguiment cada estiu.',f:'t',w:{ca:'Ostreopsis',en:'Ostreopsis ovata'}},
+{c:'planc',u:'fito',s:'Alexandrium minutum',ca:'Alexandrium',es:'Alexandrium',p:[0,10],m:'Microscòpic',d:'Dinoflagel·lat que pot proliferar en ports i badies tancades.',x:'Produeix toxines que s\'acumulen als musclos; per això de vegades es tanca la seva recol·lecció.',f:'t',w:{ca:'Alexandrium',en:'Alexandrium minutum'}},
+{c:'planc',u:'fito',s:'Tripos',ca:'Tripos',es:'Tripos',p:[0,50],m:'Microscòpic',d:'Dinoflagel·lat amb tres banyes llargues, molt comú al plàncton de la costa.',x:'Abans s\'anomenava Ceratium. Les banyes l\'ajuden a no enfonsar-se.',w:{ca:'Ceratium',en:'Tripos (dinoflagellate)'}},
+{c:'planc',u:'fito',s:'Chaetoceros',ca:'Diatomees',es:'Diatomeas',p:[0,50],m:'Microscòpic',d:'Algues unicel·lulars dins una closca de vidre, que sovint formen cadenes.',x:'Les diatomees fan una part enorme de l\'oxigen del planeta. Florida a la primavera, enterboleixen l\'aigua.',w:{ca:'Diatomea',es:'Bacillariophyta',en:'Diatom'}},
+{c:'planc',u:'fito',s:'Pseudo-nitzschia',ca:'Pseudo-nitzschia',es:'Pseudo-nitzschia',p:[0,30],m:'Microscòpic',d:'Diatomea en forma d\'agulla que forma cadenes llargues.',x:'Algunes espècies produeixen una toxina que s\'acumula als mol·luscs i se\'n fa control sanitari.',f:'t',w:{en:'Pseudo-nitzschia'}},
+{c:'planc',u:'fito',s:'Emiliania huxleyi',ca:'Cocolitofòrid',es:'Cocolitofórido',p:[0,100],m:'Microscòpic',d:'Alga unicel·lular coberta de plaques de calç en forma de rodeta.',x:'Quan prolifera, tenyeix el mar d\'un blau lletós visible des de l\'espai.',w:{ca:'Emiliania huxleyi',en:'Emiliania huxleyi'}},
+{c:'planc',u:'zoo',s:'Copepoda',ca:'Copèpodes',es:'Copépodos',p:[0,500],m:'1 a 2 mm',d:'Crustacis diminuts amb antenes llargues, els animals més abundants del plàncton.',x:'Probablement són els animals més nombrosos del planeta i l\'aliment de sardines i seitons.',w:{ca:'Copèpode',es:'Copepoda',en:'Copepod'}},
+{c:'planc',u:'zoo',s:'Chaetognatha',ca:'Quetògnats',es:'Quetognatos',p:[0,500],m:'Fins a 4 cm',d:'Cucs transparents en forma de fletxa, amb ganxos al cap per caçar.',x:'Són depredadors voraços de copèpodes, gairebé invisibles a l\'aigua.',w:{ca:'Quetògnat',es:'Chaetognatha',en:'Chaetognath'}},
+{c:'planc',u:'zoo',s:'Oikopleura',ca:'Apendicularis',es:'Apendicularias',p:[0,200],m:'Fins a 1 cm',d:'Petits animals gelatinosos que viuen dins una casa mucosa que fan servir de filtre.',x:'Canvien de casa diverses vegades al dia, i les cases abandonades són aliment per a altres animals.',w:{ca:'Larvacis',es:'Appendicularia',en:'Larvacea'}},
+{c:'planc',u:'zoo',s:'Meganyctiphanes norvegica',ca:'Krill nòrdic',es:'Krill del norte',p:[50,500],m:'Fins a 4 cm',d:'Crustaci semblant a una gambeta, que fa migracions diàries per la columna d\'aigua.',x:'Al golf del Lleó i el nord de la Costa Brava és un aliment important del rorqual comú.',w:{en:'Meganyctiphanes norvegica'}}
+];
+const PH={"Thalassoma pavo": [50972, "232940420/medium.jpg", "cc-by-nc", "Sylvain Le Bris"], "Coris julis": [50968, "244363348/medium.jpg", "cc-by-nc", "Luis P. B."], "Chromis chromis": [118682, "2587337/medium.jpg", "cc-by-nc", "whodden"], "Symphodus ocellatus": [113534, "49507615/medium.jpg", "cc-by-nc", "frahome"], "Symphodus mediterraneus": [113531, "248018599/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Labrus merula": [103912, "106145345/medium.jpg", "cc-by-nc", "josepvilanova"], "Labrus viridis": [103914, "225544984/medium.jpg", "cc-by-nc", "Bernat Espigulé"], "Serranus scriba": [118674, "244363364/medium.jpg", "cc-by-nc", "Luis P. B."], "Serranus cabrilla": [118675, "233629229/medium.jpeg", "cc-by-nc", "Benoît Segerer"], "Epinephelus marginatus": [100119, "576952820/medium.jpg", "cc-by-nc", "Billy Bensted-Smith"], "Epinephelus costae": [100091, "327115815/medium.jpg", "cc-by-nc", "Luis P. B."], "Diplodus sargus": [118669, "156153979/medium.jpg", "cc-by-nc", "Antoni López-Arenas i Cama"], "Diplodus vulgaris": [118667, "429699/medium.jpg", "cc-by", "Philippe Guillaume"], "Diplodus puntazzo": [53696, "87357945/medium.jpg", "cc-by", "Julien Renoult"], "Diplodus cervinus": [49984, "388323160/medium.jpeg", "cc-by-nc", "tim h"], "Diplodus annularis": [118665, "696023795/medium.jpg", "cc-by-nc", "Kai"], "Oblada melanura": [118662, "8074045/medium.jpg", "cc-by-nc", "whodden"], "Sparus aurata": [1494783, "720160884/medium.jpg", "cc-by-nc", "Marinko Babić"], "Spondyliosoma cantharus": [118655, "2647459/medium.jpg", "cc-by-nc", "whodden"], "Boops boops": [118664, "84254934/medium.jpg", "cc-by-nc", "josepvilanova"], "Spicara maena": [118711, "23623883/medium.jpg", "cc-by", "Julien Renoult"], "Dentex dentex": [118654, "2849891/medium.jpeg", "cc-by-sa", "Hectonichus"], "Sciaena umbra": [118683, "245156801/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Scorpaena scrofa": [84861, "240728995/medium.jpeg", "cc-by-nc", "luismartinezartola"], "Scorpaena porcus": [118631, "61740418/medium.jpg", "cc-by-nc", "josepvilanova"], "Muraena helena": [118590, "2563138/medium.jpg", "cc-by-nc", "whodden"], "Conger conger": [118589, "349125583/medium.jpg", "cc-by-nc", "Luis P. B."], "Phycis phycis": [118614, "148981607/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Apogon imberbis": [118514, "59585988/medium.jpeg", "cc-by-nc", "Daniela Kupschus"], "Anthias anthias": [118672, "99980581/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Tripterygion delaisi": [118642, "2566586/medium.jpg", "cc-by-nc", "whodden"], "Parablennius gattorugine": [118685, "477107/medium.jpg", "cc-by-nc", "Philippe Guillaume"], "Gobius cruentatus": [118702, "477066/medium.png", "cc-by", "Pierre Rouillan"], "Mullus surmuletus": [118619, "595809789/medium.jpg", "cc-by-nc", "Stamatis Zogaris"], "Chelon labrosus": [97345, "154956455/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Atherina hepsetus": [118595, "449181144/medium.jpg", "cc-by", "Julien Renoult"], "Trachinus draco": [118652, "108403403/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Echiichthys vipera": [118649, "170133104/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Uranoscopus scaber": [118641, "30005748/medium.jpg", "cc-by-nc", "whodden"], "Xyrichtys novacula": [115188, "160906095/medium.jpg", "cc-by", "Pauline Walsh Jacobson"], "Lithognathus mormyrus": [118660, "296313797/medium.jpg", "cc-by-nc", "Luis P. B."], "Pagellus erythrinus": [118659, "84255343/medium.jpg", "cc-by-nc", "josepvilanova"], "Bothus podas": [118640, "371142123/medium.jpeg", "cc-by-nc", "Frédéric ANDRE"], "Solea solea": [55396, "161931149/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Trachinotus ovatus": [51401, "164190171/medium.jpg", "cc-by-nc", "Luca Boscain"], "Lophius piscatorius": [118610, "133521176/medium.jpeg", "cc-by-nc", "luismartinezartola"], "Hippocampus guttulatus": [102821, "154810988/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Hippocampus hippocampus": [84969, "6144946/medium.jpg", "cc-by-nc", "Stefan"], "Syngnathus typhle": [118625, "162638902/medium.jpeg", "cc-by-nc-sa", "Pierre Corbrion"], "Sarpa salpa": [118663, "424954652/medium.jpg", "cc-by", "Guido and Carrara family"], "Symphodus tinca": [52554, "133600073/medium.jpg", "cc-by-nc", "luismartinezartola"], "Sardina pilchardus": [118600, "52936935/medium.jpg", "pd", "Etrusko25"], "Engraulis encrasicolus": [51910, "71402879/medium.jpg", "pd", "Etrusko25"], "Scomber scombrus": [118678, "434690152/medium.jpeg", "cc-by", "Ludovic Trochadero"], "Sarda sarda": [56940, "237419701/medium.jpg", "cc-by-nc", "Koaw Nature"], "Thunnus thynnus": [114126, "161933338/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Seriola dumerili": [51549, "300897123/medium.jpg", "cc-by-nc", "Luis P. B."], "Sphyraena viridensis": [47260, "61383857/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Belone belone": [118597, "376094344/medium.jpeg", "cc-by-nc", "giancarlo_torre"], "Coryphaena hippurus": [98531, "361046671/medium.jpg", "cc-by-nc", "Luis P. B."], "Mola mola": [49601, "216346730/medium.jpg", "cc-by-nc", "blacktip"], "Scyliorhinus canicula": [112372, "265483574/medium.jpg", "cc-by-nc", "Luis P. B."], "Prionace glauca": [110361, "358688436/medium.jpg", "cc-by-sa", "Patrick Doll"], "Dasyatis pastinaca": [47276, "265483902/medium.jpg", "cc-by-nc", "Luis P. B."], "Torpedo marmorata": [114244, "296434484/medium.jpg", "cc-by-nc", "Luis P. B."], "Myliobatis aquila": [49311, "445722347/medium.jpg", "cc-by-nc", "Le Gallais"], "Raja clavata": [48397, "460467478/medium.jpg", "cc-by-nc", "Ingo Rogalla"], "Pelagia noctiluca": [256089, "202114997/medium.jpg", "cc-by-nc", "Seawater"], "Rhizostoma pulmo": [319371, "189393640/medium.jpeg", "cc-by-nc", "xavi salvador costa"], "Cotylorhiza tuberculata": [324852, "245602105/medium.jpeg", "cc-by-nc", "Marek Koszorek"], "Aurelia aurita": [48328, "492583365/medium.jpg", "cc-by-nc", "Bianca Bahlert"], "Chrysaora hysoscella": [360314, "268410579/medium.jpg", "cc-by-nc", "Kostas Aristeidou"], "Carybdea marsupialis": [255959, "705177836/medium.jpg", "cc-by-nc", "Marinko Babić"], "Aequorea forskalea": [345076, "109121213/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Physalia physalis": [117302, "544306293/medium.jpg", "cc-by", "Jan Ebr & Ivana Ebrová"], "Velella velella": [59698, "362651247/medium.jpg", "cc-by-nc", "markc666"], "Porpita porpita": [59683, "455421962/medium.jpeg", "cc-by-nc", "Wildgreenfairy"], "Mnemiopsis leidyi": [180788, "9566101/medium.jpg", "cc-by-nc-sa", "Vidar@aqua-photos"], "Beroe ovata": [339903, "103124850/medium.jpeg", "cc-by-nc", "David Remsen"], "Leucothea multicornis": [708730, "111521934/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Salpa maxima": [800859, "78696567/medium.jpeg", "cc-by", "Chris Taklis"], "Pyrosoma atlanticum": [51108, "12095741/medium.jpeg", "cc-by-nc", "katgrom"], "Posidonia oceanica": [118943, "456503368/medium.jpg", "cc-by-nc", "Falk Viczian Solarboot-Projekte gGmbH"], "Cymodocea nodosa": [131135, "313645574/medium.jpeg", "cc-by-nc", "eduardmarques"], "Acetabularia acetabulum": [59704, "184359972/medium.jpg", "cc-by-nc", "Falk Viczian Solarboot-Projekte gGmbH"], "Halimeda tuna": [326163, "455708671/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Codium bursa": [118947, "232082882/medium.jpg", "cc-by-nc", "Sylvain Le Bris"], "Ulva lactuca": [67423, "412792345/medium.jpg", "cc-by-nc", "artzerphotog"], "Caulerpa cylindracea": [734863, "332723967/medium.jpg", "cc-by-nc", "Francesco Caroli"], "Padina pavonica": [1286606, "747338738/medium.jpg", "cc-by-nc", "cccrll"], "Dictyota dichotoma": [51024, "494882096/medium.jpeg", "cc-by-nc", "sandrinelecomte13"], "Sargassum vulgare": [322821, "666724/medium.jpg", "cc-by-nc-sa", "Valter Jacinto"], "Ericaria amentacea": [1183113, "447882842/medium.jpg", "cc-by-nc", "Daniel PAVON"], "Ellisolandia elongata": [461577, "48707910/medium.jpg", "cc-by-nc", "frahome"], "Lithophyllum byssoides": [785917, "117938778/medium.jpeg", "cc-by", "Charlène Selva"], "Peyssonnelia squamaria": [417197, "326941903/medium.jpeg", "cc-by-nc", "Frédéric ANDRE"], "Asparagopsis armata": [57779, "180355424/medium.jpg", "cc-by-nc", "Jean-Paul Cassez"], "Noctiluca scintillans": [468044, "233495738/medium.jpg", "cc-by-nc", "ryanderoo"], "Ostreopsis ovata": [891822, "39283436/medium.jpeg", "cc-by-nc", "Darrell Crisp"], "Alexandrium minutum": [203640, "26379172/medium.jpeg", "cc-by-nc-sa", "Sarka Martinez"], "Tripos": [607752, "248651422/medium.jpg", "cc-by-nc", "Ken Koll"], "Chaetoceros": [123862, "12959132/medium.jpeg", "cc-by-nc-sa", "Sarka Martinez"], "Pseudo-nitzschia": [326230, "756685/medium.jpg", "cc-by-nc", "glanglois"], "Emiliania huxleyi": [991143, "538375328/medium.jpg", "cc-by-nc", "Ian Cruickshank"], "Copepoda": [121643, "27854507/medium.jpeg", "cc-by-nc", "Joe Kunkel"], "Chaetognatha": [151827, "188735025/medium.jpg", "cc-by-nc", "Rafi Amar"], "Oikopleura": [485078, "93439357/medium.jpg", "cc-by-nc", "marathon_runners"], "Meganyctiphanes norvegica": [639178, "449434046/medium.jpg", "cc-by-sa", "Øystein Paulsen"]};
+SP.forEach((x,i)=>{x.id=i;x.ph=PH[x.s]});
+
+/* ---------- Zones de la Costa Brava ---------- */
+/* pr: pes de cada hàbitat (0 absent, 1 escàs, 2 present, 3 dominant) */
+const ZONES={
+ portbou:{n:'Portbou – Llançà',ll:[3.19,42.40],pr:{roca:3,sorra:1,pos:2,obert:2},d:'Costa rocosa i cales de còdols fins al Port de la Selva, amb prats de posidònia a les badies.'},
+ creus:{n:'Cap de Creus',ll:[3.335,42.31],pr:{roca:3,sorra:1,pos:2,obert:3},d:'Parc Natural amb costa de roca molt retallada, corrents forts i un canó submarí a prop. Aigües netes i molta diversitat.'},
+ roses:{n:'Golf de Roses',ll:[3.17,42.20],pr:{roca:1,sorra:3,pos:2,obert:1},d:'Gran badia de sorra entre Roses i l\'Escala, amb fons tous i prats de fanerògames.'},
+ montgo:{n:'L\'Escala – Montgó',ll:[3.19,42.105],pr:{roca:2,sorra:2,pos:3,obert:1},d:'Cales entre Empúries i el Montgó, amb roca, sorra i prats de posidònia ben desenvolupats.'},
+ medes:{n:'Illes Medes',ll:[3.222,42.047],pr:{roca:3,sorra:1,pos:3,obert:2},d:'Reserva marina davant l\'Estartit, protegida des dels anys vuitanta. Hi viuen meros, corballs i déntols grans i confiats.'},
+ pals:{n:'Platja de Pals',ll:[3.225,41.985],pr:{roca:1,sorra:3,pos:2,obert:1},d:'Llarga platja de sorra oberta entre l\'Estartit i Sa Riera.'},
+ begur:{n:'Begur – Aiguablava',ll:[3.255,41.94],pr:{roca:3,sorra:1,pos:2,obert:2},d:'Cales de roca amb parets que baixen ràpid. Bona zona d\'snorkel i busseig.'},
+ palafrugell:{n:'Tamariu – Calella',ll:[3.215,41.89],pr:{roca:3,sorra:2,pos:2,obert:2},d:'Cales de Palafrugell: Tamariu, Llafranc i Calella, amb roca, petites platges i posidònia.'},
+ palamos:{n:'Palamós',ll:[3.15,41.835],pr:{roca:2,sorra:2,pos:2,obert:3},d:'Badia amb port pesquer. Davant hi ha un canó submarí fondo, important per a la pesca i els cetacis.'},
+ guixols:{n:'Sant Feliu – Platja d\'Aro',ll:[3.06,41.77],pr:{roca:2,sorra:3,pos:2,obert:1},d:'Platges de sorra llargues alternades amb trams de roca.'},
+ tossa:{n:'Tossa de Mar',ll:[2.955,41.705],pr:{roca:3,sorra:2,pos:2,obert:2},d:'Costa de granit amb cales i penya-segats, i fons rocosos rics.'},
+ blanes:{n:'Lloret – Blanes',ll:[2.83,41.665],pr:{roca:2,sorra:3,pos:1,obert:2},d:'Últim tram de la Costa Brava, amb roca entre Lloret i Blanes i platges llargues de sorra.'}
+};
+const ZK=Object.keys(ZONES);
+const RES={medes:3,creus:3,begur:2,'*':1};
+const OV={
+ 'Epinephelus marginatus':RES,'Epinephelus costae':RES,'Sciaena umbra':RES,'Dentex dentex':RES,'Diplodus cervinus':RES,'Seriola dumerili':RES,
+ 'Sphyraena viridensis':{medes:3,creus:2,begur:2,palafrugell:2,tossa:2,'*':1},
+ 'Anthias anthias':{medes:3,creus:2,begur:2,tossa:1,palafrugell:1,portbou:1,'*':0},
+ 'Scorpaena scrofa':{medes:2,creus:2,begur:2,'*':1},'Phycis phycis':{medes:2,creus:2,'*':1},
+ 'Labrus viridis':{medes:2,montgo:2,creus:2,'*':1},
+ 'Thunnus thynnus':{creus:2,palamos:2,'*':1},'Mola mola':{'*':1},'Coryphaena hippurus':{'*':2},'Prionace glauca':{creus:1,palamos:1,'*':1},
+ 'Lophius piscatorius':{roses:2,palamos:2,'*':1},'Scyliorhinus canicula':{roses:2,palamos:2,blanes:2,'*':1},'Raja clavata':{roses:2,'*':1},
+ 'Myliobatis aquila':{roses:2,pals:2,'*':1},'Torpedo marmorata':{'*':1},
+ 'Hippocampus guttulatus':{roses:2,montgo:2,medes:2,portbou:2,'*':1},'Hippocampus hippocampus':{roses:2,montgo:1,'*':1},
+ 'Pelagia noctiluca':{'*':3},'Rhizostoma pulmo':{'*':2},'Cotylorhiza tuberculata':{'*':2},'Velella velella':{'*':2},
+ 'Aurelia aurita':{roses:2,palamos:2,'*':1},'Mnemiopsis leidyi':{roses:2,palamos:2,'*':1},
+ 'Physalia physalis':{'*':1},'Carybdea marsupialis':{'*':1},'Chrysaora hysoscella':{'*':1},'Aequorea forskalea':{'*':1},'Porpita porpita':{'*':1},
+ 'Pyrosoma atlanticum':{creus:1,palamos:1,'*':1},'Leucothea multicornis':{'*':1},'Beroe ovata':{'*':1},'Salpa maxima':{'*':1},
+ 'Posidonia oceanica':{medes:3,montgo:3,creus:3,portbou:3,'*':2},'Cymodocea nodosa':{roses:3,montgo:2,pals:2,'*':1},
+ 'Lithophyllum byssoides':{creus:3,portbou:2,medes:2,begur:1,palafrugell:1,tossa:1,'*':0},
+ 'Ericaria amentacea':{creus:3,portbou:2,medes:2,begur:2,palafrugell:2,tossa:2,roses:0,pals:0,'*':1},
+ 'Peyssonnelia squamaria':{medes:3,creus:2,begur:2,'*':1},
+ 'Ostreopsis ovata':{roses:1,pals:1,'*':2},'Alexandrium minutum':{roses:2,palamos:2,blanes:2,'*':1},
+ 'Meganyctiphanes norvegica':{creus:3,palamos:2,'*':1},'Emiliania huxleyi':{'*':1},'Noctiluca scintillans':{'*':2}
+};
+const SUBHAB={roca:'roca',sorra:'sorra',pos:'pos',obert:'obert',cart:'sorra',fanero:'pos',verda:'roca',bruna:'roca',vermella:'roca'};
+function freq(x,z){const o=OV[x.s];if(o){if(o[z]!=null)return o[z];if(o['*']!=null)return o['*']}
+  if(x.c==='medusa'||x.c==='planc')return 2;
+  return ZONES[z].pr[SUBHAB[x.u]]??1}
+const FQ=['No hi és','Ocasional','Habitual','Freqüent'];
+
+/* ---------- Mapa SVG ---------- */
+const P=(lon,lat)=>[Math.round((lon-2.72)*743),Math.round((42.47-lat)*1000)];
+const COAST=[[3.160,42.427],[3.155,42.405],[3.157,42.367],[3.200,42.338],[3.255,42.336],[3.300,42.335],[3.322,42.320],[3.290,42.300],[3.285,42.288],[3.268,42.243],[3.218,42.250],[3.178,42.262],[3.122,42.245],[3.110,42.190],[3.118,42.135],[3.135,42.122],[3.180,42.110],[3.195,42.080],[3.202,42.054],[3.195,42.020],[3.200,41.980],[3.220,41.968],[3.235,41.950],[3.218,41.935],[3.205,41.917],[3.195,41.893],[3.185,41.885],[3.170,41.875],[3.130,41.847],[3.100,41.830],[3.070,41.818],[3.030,41.780],[2.990,41.745],[2.933,41.718],[2.890,41.705],[2.845,41.698],[2.795,41.674],[2.775,41.660]];
+const LAND='M'+[[2.60,42.50],[3.16,42.50],...COAST,[2.60,41.62]].map(([a,b])=>P(a,b).join(',')).join(' L')+' Z';
+const LBLPOS={creus:'l'};
+function mapSVG(opt){
+  const {sel,scores,interactive,labels}=opt;
+  const medes=P(3.222,42.047);
+  let z='';
+  ZK.forEach(k=>{const [x,y]=P(...ZONES[k].ll);
+    if(scores){const f=scores[k];const r=[7,11,15,20][f];
+      z+=`<circle cx="${x}" cy="${y}" r="${r}" class="f${f}"><title>${ZONES[k].n}: ${FQ[f]}</title></circle>`}
+    else{const lx=LBLPOS[k]==='l'?x-18:x+18,anchor=LBLPOS[k]==='l'?'end':'start';
+      z+=`<g class="zone${sel===k?' sel':''}" data-z="${k}" tabindex="0" role="button" aria-label="${ZONES[k].n}" aria-pressed="${sel===k}">
+        <circle class="hit" cx="${x}" cy="${y}" r="26"/><circle class="dot" cx="${x}" cy="${y}" r="${sel===k?12:9}"/>
+        ${labels?`<text class="lbl${sel===k?' sel':''}" x="${lx}" y="${y+7}" text-anchor="${anchor}">${ZONES[k].n}</text>`:''}</g>`}});
+  const vbw=labels?640:520;
+  return `<svg class="map" viewBox="0 0 ${vbw} 840" role="img" aria-label="Mapa de la Costa Brava">
+    <rect class="sea" width="${vbw}" height="840"/>
+    <path class="land" d="${LAND}"/>
+    <ellipse class="land" cx="${medes[0]}" cy="${medes[1]}" rx="6" ry="4"/>
+    ${labels?`<text class="ghost" x="150" y="30">FRANÇA</text><text class="ghost" x="420" y="790">MAR</text><text class="ghost" x="420" y="814">MEDITERRANI</text><text class="ghost" x="40" y="420">GIRONA</text>`:''}
+    ${z}</svg>`;
+}
+
+
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/·/g,'');
+
+/* ---------- Fotos (iNaturalist, llicències lliures) i enllaços ---------- */
+const LIC={'cc-by':'CC BY','cc-by-sa':'CC BY-SA','cc-by-nc':'CC BY-NC','cc-by-nc-sa':'CC BY-NC-SA','cc0':'CC0','pd':'Domini públic'};
+const imgURL=(x,size)=>x.ph?'https://inaturalist-open-data.s3.amazonaws.com/photos/'+x.ph[1].replace('medium',size||'medium'):'';
+const wikiURL=x=>'https://ca.wikipedia.org/w/index.php?go=Go&search='+encodeURIComponent((x.w&&x.w.ca)||x.s);
+const wikiEN=x=>'https://en.wikipedia.org/w/index.php?go=Go&search='+encodeURIComponent((x.w&&x.w.en)||x.s);
+const inatURL=x=>x.ph?'https://www.inaturalist.org/taxa/'+x.ph[0]:'https://www.inaturalist.org/taxa/search?q='+encodeURIComponent(x.s);
+function credit(x){return x.ph?`Foto: ${esc(x.ph[3])} · ${LIC[x.ph[2]]||x.ph[2]} · <a href="${inatURL(x)}" target="_blank" rel="noopener">iNaturalist</a>`:''}
+
+
+/* ---------- Estat i filtres ---------- */
+let state={c:'peix',u:'',q:'',prof:'',z:'',occ:false};
+function drawCats(){
+  const n={tot:SP.length};SP.forEach(x=>n[x.c]=(n[x.c]||0)+1);
+  $('#cats').innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="cat" data-c="${k}" aria-pressed="${state.c===k}">${ICONS[k]}<b>${v.n}</b><span>${n[k]} espècies</span></button>`).join('');
+  $('#catintro').innerHTML=CATS[state.c].intro;
+}
+function drawChips(){
+  const cat=CATS[state.c];
+  if(!cat.sub){$('#chips').innerHTML='';return}
+  const n={};SP.filter(x=>x.c===state.c).forEach(x=>n[x.u]=(n[x.u]||0)+1);
+  $('#chips').innerHTML=`<button class="chip" data-u="" aria-pressed="${state.u===''}">Totes<span class="c">${Object.values(n).reduce((a,b)=>a+b,0)}</span></button>`+
+    Object.entries(cat.sub).map(([k,v])=>`<button class="chip" data-u="${k}" aria-pressed="${state.u===k}">${v}<span class="c">${n[k]||0}</span></button>`).join('');
+}
+$('#cats').addEventListener('click',e=>{const b=e.target.closest('.cat');if(!b)return;state.c=b.dataset.c;state.u='';drawCats();drawChips();drawGrid()});
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;state.u=b.dataset.u;drawChips();drawGrid()});
+$('#q').addEventListener('input',e=>{state.q=e.target.value;drawGrid()});
+$('#prof').addEventListener('change',e=>{state.prof=e.target.value;drawGrid()});
+
+
+function drawMap(){
+  $('#mapwrap').innerHTML=mapSVG({sel:state.z,interactive:true,labels:true});
+  $('#allcoast').setAttribute('aria-pressed',state.z==='');
+  $('#zoneinfo').innerHTML=state.z?`<b>${ZONES[state.z].n}</b>${ZONES[state.z].d}`:'<b>Tota la Costa Brava</b>Toca un punt del mapa per veure només les espècies d\'aquell tram de costa.';
+}
+function pickZone(z){state.z=(state.z===z?'':z);drawMap();drawGrid()}
+$('#mapwrap').addEventListener('click',e=>{const g=e.target.closest('.zone');if(g)pickZone(g.dataset.z)});
+$('#mapwrap').addEventListener('keydown',e=>{const g=e.target.closest('.zone');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pickZone(g.dataset.z)}});
+$('#occ').addEventListener('change',e=>{state.occ=e.target.checked;drawGrid()});
+$('#allcoast').addEventListener('click',()=>{state.z='';drawMap();drawGrid()});
+const depthTxt=p=>p[1]===0?'Superfície':p[0]===p[1]?`${p[0]} m`:`${p[0]}–${p[1]} m`;
+const subName=x=>CATS[x.c].sub[x.u];
+function tags(x){let t='';
+  if(x.pk)t+=`<span class="tag ${/No pica|Inofensiva|Gairebé/.test(x.pk)?'ok':'v'}">Picada: ${x.pk.toLowerCase()}</span>`;
+  else if(x.f&&x.f.includes('v'))t+='<span class="tag v">Pica / verí</span>';
+  if(x.f&&x.f.includes('t'))t+='<span class="tag v">Tòxica</span>';
+  if(x.f&&x.f.includes('p'))t+='<span class="tag p">Protegida</span>';
+  if(x.f&&x.f.includes('i'))t+='<span class="tag i">Invasora</span>';
+  return t}
+function filtered(){
+  const q=norm(state.q.trim());
+  return SP.filter(x=>{
+    if(state.c!=='tot'&&x.c!==state.c)return false;
+    if(state.u&&x.u!==state.u)return false;
+    if(state.prof){const v=+state.prof;if(v===999){if(x.p[1]<=40)return false}else if(x.p[0]>v)return false}
+    if(q&&!norm(x.ca+' '+x.es+' '+x.s+' '+subName(x)+' '+CATS[x.c].n).includes(q))return false;
+    if(state.z&&freq(x,state.z)<(state.occ?1:2))return false;
+    return true}).sort((a,b)=>state.z?freq(b,state.z)-freq(a,state.z):0)
+}
+function drawGrid(){
+  const list=filtered();
+  $('#count').textContent=state.z?`${list.length} espècies a ${ZONES[state.z].n}`:`${list.length} espècies a tota la costa`;
+  if(!list.length){$('#grid').innerHTML='<div class="empty" style="grid-column:1/-1">Cap espècie coincideix amb aquests filtres. Prova amb un altre nom, canvia de categoria o marca «Inclou també les espècies ocasionals» al mapa.</div>';return}
+  $('#grid').innerHTML=list.map(x=>`<button class="card" data-c="${x.c}" data-id="${x.id}">
+    <div class="photo">${ICONS[x.c]}${x.ph?`<img src="${imgURL(x)}" alt="" loading="lazy" onload="this.classList.add('ok')">`:''}</div>
+    <div class="body"><h3>${esc(x.ca)}</h3><div class="sci">${esc(x.s)}</div><div class="es">${esc(x.es)} · ${esc(subName(x))}</div>
+    <div class="tags">${state.z?`<span class="tag fq${freq(x,state.z)}">${FQ[freq(x,state.z)]}</span>`:''}${tags(x)}</div></div></button>`).join('');
+}
+$('#grid').addEventListener('click',e=>{const c=e.target.closest('.card');if(c)openSheet(+c.dataset.id)});
+
+/* ---------- Fitxa ---------- */
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function fmtDate(s){const [y,m,d]=s.split('-');const mm=['gen.','febr.','març','abr.','maig','juny','jul.','ag.','set.','oct.','nov.','des.'];return `${+d} ${mm[+m-1]} ${y}`}
+function whereHTML(x){
+  const sc={};ZK.forEach(k=>sc[k]=freq(x,k));
+  const grp=f=>ZK.filter(k=>sc[k]===f).map(k=>ZONES[k].n);
+  const rows=[3,2,1].map(f=>{const g=grp(f);return g.length?`<li><b>${FQ[f]}</b>${g.join(', ')}</li>`:''}).join('');
+  const none=grp(0);
+  return `<div class="where">${mapSVG({scores:sc})}<ul>${rows}${none.length?`<li><b>Poc probable</b>${none.join(', ')}</li>`:''}</ul></div>`;
+}
+function openSheet(id){
+  const x=SP[id];
+  const third=x.pk?['Picada',x.pk]:['Grup',subName(x)];
+  const notes=[
+    x.f&&x.f.includes('v')&&!x.pk?'<div class="note warn"><b>Compte:</b> pot punxar, picar o mossegar. Mira-la sense tocar.</div>':'',
+    x.pk&&!/No pica|Inofensiva|Gairebé/.test(x.pk)?'<div class="note warn"><b>Si et pica:</b> renta amb aigua de mar, no freguis, treu els tentacles amb pinces o una targeta i aplica fred embolicat. Si la reacció és forta, truca al 112.</div>':'',
+    x.f&&x.f.includes('t')?'<div class="note warn"><b>Tòxica:</b> les seves toxines poden afectar persones o acumular-se en marisc.</div>':'',
+    x.f&&x.f.includes('p')?'<div class="note"><b>Espècie protegida o amenaçada.</b> No la molestis ni la recol·lectis.</div>':'',
+    x.f&&x.f.includes('i')?'<div class="note warn"><b>Espècie invasora.</b> No la transportis a altres zones amb ancores, xarxes o material de busseig.</div>':''].join('');
+  $('#overlay').innerHTML=`<div class="sheet" data-c="${x.c}" role="dialog" aria-modal="true" aria-labelledby="sh-t">
+    <div class="hero" id="sh-hero">${ICONS[x.c]}${x.ph?`<img src="${imgURL(x,'large')}" alt="${esc(x.ca)}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${imgURL(x)}'}">`:''}<button class="close" id="close" aria-label="Tanca">×</button></div>
+    <div class="credit">${credit(x)}</div>
+    <div class="inner">
+      <div class="eyebrow">${CATS[x.c].n} · ${esc(subName(x))}</div>
+      <h2 id="sh-t">${esc(x.ca)}</h2><div class="sci">${esc(x.s)}</div><div class="es">Castellà: ${esc(x.es)}</div>
+      <dl class="facts">
+        <div><dt>Mida</dt><dd>${esc(x.m)}</dd></div>
+        <div><dt>Profunditat</dt><dd>${depthTxt(x.p)}</dd></div>
+        <div><dt>${third[0]}</dt><dd>${esc(third[1])}</dd></div>
+      </dl>
+      <p>${esc(x.d)}</p>
+      <p><i>${esc(x.x)}</i></p>
+      ${notes}
+      <div class="h4">On la pots trobar a la Costa Brava</div>
+      ${whereHTML(x)}
+      <div class="h4">Viquipèdia i més informació</div>
+      <div class="links"><a class="main" href="${wikiURL(x)}" target="_blank" rel="noopener">Article a la Viquipèdia</a><a href="${wikiEN(x)}" target="_blank" rel="noopener">Wikipedia en anglès</a><a href="${inatURL(x)}" target="_blank" rel="noopener">Més fotos a iNaturalist</a></div>
+    </div></div>`;
+  $('#overlay').hidden=false;document.body.style.overflow='hidden';
+  $('#close').focus();$('#close').onclick=closeSheet;
+}
+function closeSheet(){$('#overlay').hidden=true;$('#overlay').innerHTML='';document.body.style.overflow=''}
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').hidden)closeSheet()});
+
+drawCats();drawChips();drawMap();drawGrid();
+</script>
