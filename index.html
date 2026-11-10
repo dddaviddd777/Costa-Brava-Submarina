@@ -7,11 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: capçalera, quatre categories grans com a pestanyes, subcategories en xips, graella de fitxes amb foto; detall en panell lateral */
+/* Layout: capçalera, set categories grans com a pestanyes, subcategories en xips, graella de fitxes amb foto; detall en panell lateral */
 :root{
   --bg:#9ED9D4; --bg2:#CFEFEA; --surface:#FFFFFF; --ink:#0A2A2E; --muted:#45656A; --line:#B5DCD7;
   --accent:#0B7C80; --accent-soft:#D3ECEC; --coral:#C2452D; --coral-soft:#F7DED7; --gold:#9A6B00; --gold-soft:#F5E8C6;
-  --c-peix:#0B7C80; --c-medusa:#8A4FB5; --c-alga:#3F7F2E; --c-planc:#B56A12;
+  --c-peix:#0B7C80; --c-medusa:#8A4FB5; --c-alga:#3F7F2E; --c-planc:#B56A12; --c-inv:#B8436A; --c-rep:#8A5A1F; --c-mam:#3D58A8;
   --deep1:#BFE3E6; --deep2:#4E9DAA; --deep3:#123F52; --sea:#D2F0EC; --land:#E9E2D3; --coast:#9DB7BD;
   --f-display:"Bricolage Grotesque",system-ui,sans-serif;
   --f-body:"Literata",Georgia,serif;
@@ -20,12 +20,12 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#05343A; --bg2:#0A4B52; --surface:#0C3B42; --ink:#E1F3F1; --muted:#93BFBE; --line:#1C5A60;
   --accent:#4FC3C2; --accent-soft:#123D42; --coral:#F08A72; --coral-soft:#3B1F1A; --gold:#E6B94F; --gold-soft:#352A10;
-  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A;
+  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A; --c-inv:#F290B0; --c-rep:#D9AE6E; --c-mam:#9EB4F2;
   --deep1:#1E5663; --deep2:#2D7E8D; --deep3:#9ED3DA; --sea:#0C2E39; --land:#213A36; --coast:#3E6A70; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#05343A; --bg2:#0A4B52; --surface:#0C3B42; --ink:#E1F3F1; --muted:#93BFBE; --line:#1C5A60;
   --accent:#4FC3C2; --accent-soft:#123D42; --coral:#F08A72; --coral-soft:#3B1F1A; --gold:#E6B94F; --gold-soft:#352A10;
-  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A;
+  --c-peix:#4FC3C2; --c-medusa:#C79BEA; --c-alga:#8CCB6E; --c-planc:#F0AE5A; --c-inv:#F290B0; --c-rep:#D9AE6E; --c-mam:#9EB4F2;
   --deep1:#1E5663; --deep2:#2D7E8D; --deep3:#9ED3DA; --sea:#0C2E39; --land:#213A36; --coast:#3E6A70; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -43,7 +43,7 @@ h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5vw,52px);l
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Categories principals */
-.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:22px 0 14px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 14px}
 .cat{--c:var(--ink);display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;color:var(--ink);font:inherit;position:relative;overflow:hidden}
 .cat svg{grid-row:span 2;width:34px;height:34px;color:var(--c)}
 .cat b{font-family:var(--f-display);font-weight:700;font-size:16px;line-height:1.15}
@@ -51,7 +51,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .cat::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--c);opacity:0;transition:opacity .15s}
 .cat[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset}
 .cat[aria-pressed="true"]::after{opacity:1}
-.cat[data-c="peix"]{--c:var(--c-peix)}.cat[data-c="medusa"]{--c:var(--c-medusa)}.cat[data-c="alga"]{--c:var(--c-alga)}.cat[data-c="planc"]{--c:var(--c-planc)}
+.cat[data-c="peix"]{--c:var(--c-peix)}.cat[data-c="medusa"]{--c:var(--c-medusa)}.cat[data-c="alga"]{--c:var(--c-alga)}.cat[data-c="planc"]{--c:var(--c-planc)}.cat[data-c="inv"]{--c:var(--c-inv)}.cat[data-c="rep"]{--c:var(--c-rep)}.cat[data-c="mam"]{--c:var(--c-mam)}
 .catintro{margin:0 0 14px;padding:12px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:14.5px}
 .catintro b{color:var(--ink);font-family:var(--f-display)}
 
@@ -118,7 +118,7 @@ select{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);bo
 .main{min-width:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
 .card{--c:var(--c-peix);display:flex;flex-direction:column;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;color:inherit;font:inherit;padding:0;transition:transform .15s,border-color .15s}
-.card[data-c="medusa"]{--c:var(--c-medusa)}.card[data-c="alga"]{--c:var(--c-alga)}.card[data-c="planc"]{--c:var(--c-planc)}
+.card[data-c="medusa"]{--c:var(--c-medusa)}.card[data-c="alga"]{--c:var(--c-alga)}.card[data-c="planc"]{--c:var(--c-planc)}.card[data-c="inv"]{--c:var(--c-inv)}.card[data-c="rep"]{--c:var(--c-rep)}.card[data-c="mam"]{--c:var(--c-mam)}
 .card:hover{border-color:var(--c);transform:translateY(-1px)}
 .photo{position:relative;aspect-ratio:4/3;max-width:100%;background:color-mix(in srgb,var(--c) 14%,var(--surface));display:grid;place-items:center;color:var(--c);overflow:hidden}
 .photo svg{width:44px;height:44px;opacity:.7}
@@ -140,7 +140,7 @@ select{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);bo
 /* Panell de detall */
 .overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--deep3) 45%,transparent);z-index:20;display:flex;justify-content:flex-end}
 .sheet{--c:var(--c-peix);background:var(--surface);width:min(580px,100%);height:100%;overflow-y:auto;padding:0 0 calc(30px + env(safe-area-inset-bottom,0px));box-shadow:-20px 0 40px rgba(0,0,0,.18);animation:slide .22s ease-out}
-.sheet[data-c="medusa"]{--c:var(--c-medusa)}.sheet[data-c="alga"]{--c:var(--c-alga)}.sheet[data-c="planc"]{--c:var(--c-planc)}
+.sheet[data-c="medusa"]{--c:var(--c-medusa)}.sheet[data-c="alga"]{--c:var(--c-alga)}.sheet[data-c="planc"]{--c:var(--c-planc)}.sheet[data-c="inv"]{--c:var(--c-inv)}.sheet[data-c="rep"]{--c:var(--c-rep)}.sheet[data-c="mam"]{--c:var(--c-mam)}
 @keyframes slide{from{transform:translateX(30px);opacity:.6}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}.card{transition:none}.photo img{transition:none}}
 .sheet .hero{position:relative;aspect-ratio:16/10;max-width:100%;background:color-mix(in srgb,var(--c) 14%,var(--surface));display:grid;place-items:center;color:var(--c)}
@@ -208,7 +208,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-si
     <div>
       <div class="eyebrow">Guia de camp · De Portbou a Blanes</div>
       <h1>Costa Brava Submarina</h1>
-      <p class="lede">Els peixos, les meduses, les plantes i algues i el plàncton que pots trobar sota l'aigua de la Costa Brava, amb foto i enllaç a la Viquipèdia de cada espècie.</p>
+      <p class="lede">Els peixos, els invertebrats, les meduses, les plantes i algues, el plàncton, les tortugues i els cetacis que pots trobar sota l'aigua de la Costa Brava, amb foto i enllaç a la Viquipèdia de cada espècie.</p>
     </div>
   </header>
 
@@ -257,6 +257,9 @@ const ICONS={
  medusa:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 15a11 9 0 0 1 22 0c-2 1-4 1.2-5.5 0-1.5 1.2-3.5 1.2-5.5 0-2 1.2-4 1.2-5.5 0C9 16.2 7 16 5 15z"/><path d="M10 17c0 4-2 6-1 10M16 17c0 4 1 7 0 11M22 17c0 4 2 6 1 10"/></svg>',
  alga:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 29V10c0-3 1-5 2-7M16 22c-4-3-7-6-8-12M16 18c4-2 7-6 8-11M11 29c0-4-1-7-3-9M21 29c0-3 1-6 3-8"/></svg>',
  planc:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="11" r="4.5"/><path d="M10 6.5v9M5.5 11h9"/><path d="M21 6l5 9h-10z" stroke-linejoin="round"/><circle cx="20" cy="23" r="5"/><circle cx="20" cy="23" r="1.6" fill="currentColor"/><circle cx="7" cy="24" r="1.5" fill="currentColor"/><circle cx="27" cy="22" r="1.2" fill="currentColor"/></svg>',
+ inv:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M16 3.5l3.3 8.1 8.7.7-6.7 5.6 2.1 8.6L16 21.8l-7.4 4.7 2.1-8.6L4 12.3l8.7-.7z"/><circle cx="16" cy="15.5" r="1.3" fill="currentColor"/></svg>',
+ rep:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="14" cy="16" rx="8" ry="6.5"/><circle cx="25" cy="16" r="2.5"/><path d="M9.5 13h9M9.5 19h9M9 10.5 5.5 7M19 10.5l3-3.5M9 21.5l-3.5 3.5M19 21.5l3 3.5"/></svg>',
+ mam:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22v-9C13 13 9 11 6 7c4 1 7.5 2.5 10 6 2.5-3.5 6-5 10-6-3 4-7 6-10 6z"/><path d="M3 26c3-2 6-2 9 0s6 2 9 0 6-2 8-1"/></svg>',
  tot:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12c3-3 6-3 9 0s6 3 9 0 6-3 8-1M3 19c3-3 6-3 9 0s6 3 9 0 6-3 8-1M3 26c3-3 6-3 9 0s6 3 9 0 6-3 8-1"/></svg>'
 };
 const CATS={
@@ -268,7 +271,13 @@ const CATS={
  alga:{n:'Plantes i algues',intro:'<b>Plantes marines i algues.</b> La posidònia i la cimodòcia són plantes amb flor; la resta són algues, classificades pel seu color.',
    sub:{fanero:'Plantes amb flor',verda:'Algues verdes',bruna:'Algues brunes',vermella:'Algues vermelles'}},
  planc:{n:'Plàncton',intro:'<b>Plàncton.</b> Organismes que van a la deriva amb els corrents. El fitoplàncton fa la fotosíntesi i és la base de la cadena alimentària; el zooplàncton són animalons que se l\'alimenten. La majoria només es veuen amb microscopi, però alguns es noten a simple vista per la llum o el color de l\'aigua.',
-   sub:{fito:'Fitoplàncton',zoo:'Zooplàncton'}}
+   sub:{fito:'Fitoplàncton',zoo:'Zooplàncton'}},
+ inv:{n:'Invertebrats',intro:'<b>Invertebrats del fons.</b> Pops, eriçons, estrelles, anemones, gorgònies i crustacis: són els animals que més veuràs fent snorkel si mires de prop les roques i la sorra. Mira sense tocar: molts punxen o piquen, i d\'altres es fan malbé fàcilment.',
+   sub:{mol:'Mol·luscs',equi:'Equinoderms',cnid:'Anemones, gorgònies i corall',crust:'Crustacis',cuc:'Cucs marins'}},
+ rep:{n:'Rèptils',intro:'<b>Tortugues marines.</b> Totes estan protegides. Si en veus una, mantén la distància i no la toquis ni la persegueixis. Si està ferida, enredada en una xarxa o encallada a la platja, truca al 112.',
+   sub:{tort:'Tortugues marines'}},
+ mam:{n:'Mamífers marins',intro:'<b>Dofins i balenes.</b> Respiren aire i han de sortir a la superfície, per això de vegades els veus des de la costa o des d\'un vaixell. Tots estan protegits: no t\'hi acostis nedant, les embarcacions han de mantenir una distància mínima de 60 metres i, si en trobes un d\'encallat, truca al 112.',
+   sub:{dofi:'Dofins',cet:'Balenes i catxalots'}}
 };
 
 /* c categoria · u subcategoria · s nom científic · ca · es · p [mín,màx] m · m mida · d descripció · x curiositat · f: v pica/verí, p protegida o amenaçada, i invasora, t tòxica · pk picada (meduses) · w títol alternatiu per a la Viquipèdia */
@@ -395,9 +404,40 @@ const SP=[
 {c:'planc',u:'zoo',s:'Copepoda',ca:'Copèpodes',es:'Copépodos',p:[0,500],m:'1 a 2 mm',d:'Crustacis diminuts amb antenes llargues, els animals més abundants del plàncton.',x:'Probablement són els animals més nombrosos del planeta i l\'aliment de sardines i seitons.',w:{ca:'Copèpode',es:'Copepoda',en:'Copepod'}},
 {c:'planc',u:'zoo',s:'Chaetognatha',ca:'Quetògnats',es:'Quetognatos',p:[0,500],m:'Fins a 4 cm',d:'Cucs transparents en forma de fletxa, amb ganxos al cap per caçar.',x:'Són depredadors voraços de copèpodes, gairebé invisibles a l\'aigua.',w:{ca:'Quetògnat',es:'Chaetognatha',en:'Chaetognath'}},
 {c:'planc',u:'zoo',s:'Oikopleura',ca:'Apendicularis',es:'Apendicularias',p:[0,200],m:'Fins a 1 cm',d:'Petits animals gelatinosos que viuen dins una casa mucosa que fan servir de filtre.',x:'Canvien de casa diverses vegades al dia, i les cases abandonades són aliment per a altres animals.',w:{ca:'Larvacis',es:'Appendicularia',en:'Larvacea'}},
-{c:'planc',u:'zoo',s:'Meganyctiphanes norvegica',ca:'Krill nòrdic',es:'Krill del norte',p:[50,500],m:'Fins a 4 cm',d:'Crustaci semblant a una gambeta, que fa migracions diàries per la columna d\'aigua.',x:'Al golf del Lleó i el nord de la Costa Brava és un aliment important del rorqual comú.',w:{en:'Meganyctiphanes norvegica'}}
+{c:'planc',u:'zoo',s:'Meganyctiphanes norvegica',ca:'Krill nòrdic',es:'Krill del norte',p:[50,500],m:'Fins a 4 cm',d:'Crustaci semblant a una gambeta, que fa migracions diàries per la columna d\'aigua.',x:'Al golf del Lleó i el nord de la Costa Brava és un aliment important del rorqual comú.',w:{en:'Meganyctiphanes norvegica'}},
+
+/* ---------- INVERTEBRATS (h: hàbitat propi per a les freqüències, si no és el de la subcategoria) ---------- */
+{c:'inv',u:'mol',s:'Octopus vulgaris',ca:'Pop roquer',es:'Pulpo común',p:[0,200],m:'Fins a 1 m amb els braços',d:'Mol·lusc de vuit braços amb ventoses que canvia de color i de textura en un instant.',x:'Sovint delata el cau la pila de closques buides que deixa a l\'entrada.'},
+{c:'inv',u:'mol',s:'Sepia officinalis',ca:'Sípia',es:'Sepia',p:[0,200],h:'sorra',m:'Fins a 45 cm',d:'Cefalòpode de cos ample amb una aleta ondulant al voltant, sovint quieta sobre la sorra.',x:'Dins el cos té una closca interna, l\'os de sípia, que de vegades trobes a la platja.'},
+{c:'inv',u:'mol',s:'Pinna nobilis',ca:'Nacra',es:'Nacra',p:[0,60],h:'pos',m:'Fins a 1,2 m',d:'El bivalve més gran del Mediterrani, clavat verticalment a la sorra o entre la posidònia.',x:'Des del 2016 un paràsit n\'ha matat gairebé totes les poblacions. Si en veus una de viva, és una troballa excepcional.',f:'p'},
+{c:'inv',u:'mol',s:'Peltodoris atromaculata',ca:'Vaqueta',es:'Vaca marina',p:[2,100],m:'Fins a 10 cm',d:'Nudibranqui blanc amb taques marrons, com una vaca, que s\'alimenta d\'esponges.',x:'Els nudibranquis són cargols sense closca; el plomall de l\'esquena són les brànquies.'},
+{c:'inv',u:'equi',s:'Paracentrotus lividus',ca:'Garota',es:'Erizo de mar común',p:[0,80],m:'Fins a 7 cm sense punxes',d:'Eriçó de punxes violetes, verdoses o marrons que sovint es tapa amb trossets de petxina o d\'alga.',x:'És comestible i a l\'hivern se\'n fan garotades; la pesca està regulada per protegir-ne les poblacions.',f:'v'},
+{c:'inv',u:'equi',s:'Arbacia lixula',ca:'Eriçó negre',es:'Erizo negro',p:[0,40],m:'Fins a 6 cm sense punxes',d:'Eriçó de punxes negres i brillants, sense res enganxat, a les roques ben il·luminades.',x:'No es menja. Les punxes negres i netes ajuden a distingir-lo de la garota.',f:'v'},
+{c:'inv',u:'equi',s:'Echinaster sepositus',ca:'Estrella de mar vermella',es:'Estrella de mar roja',p:[0,200],m:'Fins a 20 cm',d:'Estrella de cinc braços llargs i arrodonits d\'un vermell ataronjat intens.',x:'Si perd un braç, el regenera. No la treguis de l\'aigua: es fa malbé.'},
+{c:'inv',u:'equi',s:'Holothuria tubulosa',ca:'Cogombre de mar',es:'Pepino de mar',p:[0,100],h:'pos',m:'Fins a 30 cm',d:'Animal allargat i marró, tou i rugós, que s\'arrossega lentament sobre la sorra i la posidònia.',x:'S\'empassa sorra i en digereix la matèria orgànica, fent de netejador del fons.'},
+{c:'inv',u:'cnid',s:'Anemonia viridis',ca:'Anemone comuna',es:'Ortiguilla',p:[0,20],m:'Fins a 20 cm',d:'Anemone de tentacles llargs, verds o marrons amb les puntes liles, que no es poden amagar.',x:'El color verd ve d\'algues microscòpiques que viuen dins dels tentacles.',f:'v'},
+{c:'inv',u:'cnid',s:'Actinia equina',ca:'Tomàquet de mar',es:'Tomate de mar',p:[0,5],m:'Fins a 7 cm',d:'Anemone vermella i llisa a la franja de l\'onatge. Fora de l\'aigua es tanca com una bola.',x:'Té una corona de boletes blaves que fa servir per lluitar contra les anemones veïnes.',f:'v'},
+{c:'inv',u:'cnid',s:'Eunicella singularis',ca:'Gorgònia blanca',es:'Gorgonia blanca',p:[3,60],m:'Fins a 50 cm',d:'Gorgònia de branques blanques i rectes, com un canelobre, sobre roca ben il·luminada.',x:'Té algues microscòpiques dins dels pòlips; per això viu amb més llum que la gorgònia vermella.'},
+{c:'inv',u:'cnid',s:'Paramuricea clavata',ca:'Gorgònia vermella',es:'Gorgonia roja',p:[15,110],m:'Fins a 1 m',d:'Colònia en forma de ventall, vermella o vermella i groga, a les parets ombrívoles.',x:'Creix només uns centímetres l\'any. Les onades de calor marines n\'han matat moltes colònies.'},
+{c:'inv',u:'cnid',s:'Corallium rubrum',ca:'Corall vermell',es:'Coral rojo',p:[10,300],m:'Colònies de fins a 20 cm',d:'Petites branques vermelles amb pòlips blancs, a les coves i sota els extraploms.',x:'Fa segles que s\'extreu per fer joies, i la Costa Brava en va tenir una indústria important. Avui la seva recol·lecció està molt restringida.',f:'p'},
+{c:'inv',u:'crust',s:'Palinurus elephas',ca:'Llagosta',es:'Langosta',p:[10,200],m:'Fins a 50 cm',d:'Crustaci de closca marró vermellosa i antenes llargues i punxents, sense pinces.',x:'De dia s\'amaga a les escletxes i només en treu les antenes.'},
+{c:'inv',u:'crust',s:'Pachygrapsus marmoratus',ca:'Cranc de roca',es:'Cangrejo corredor',p:[0,1],m:'Closca fins a 4 cm',d:'Cranc fosc i ratllat que corre per les roques de la vora, dins i fora de l\'aigua.',x:'Pot passar estona fora de l\'aigua i fuig de costat a gran velocitat.'},
+{c:'inv',u:'crust',s:'Dardanus calidus',ca:'Ermità',es:'Ermitaño',p:[2,40],h:'sorra',m:'Fins a 10 cm',d:'Cranc vermell que viu dins una closca buida de cargol, sovint amb anemones a sobre.',x:'Quan creix es canvia de closca i s\'emporta les anemones a la nova.'},
+{c:'inv',u:'cuc',s:'Sabella spallanzanii',ca:'Espirògraf',es:'Espirógrafo',p:[1,30],m:'Fins a 40 cm',d:'Cuc que viu dins un tub i desplega un plomall en espiral per filtrar l\'aigua.',x:'Si el toques o li fas ombra, amaga el plomall dins el tub en un instant.'},
+
+/* ---------- RÈPTILS ---------- */
+{c:'rep',u:'tort',s:'Caretta caretta',ca:'Tortuga babaua',es:'Tortuga boba',p:[0,200],m:'Closca fins a 1 m',d:'Tortuga marina de closca marró vermellosa i cap gros. És la més comuna al Mediterrani.',x:'També se\'n diu careta-careta. Cada vegada fa més nius a les platges catalanes.',f:'p'},
+{c:'rep',u:'tort',s:'Dermochelys coriacea',ca:'Tortuga llaüt',es:'Tortuga laúd',p:[0,1000],m:'Fins a 2 m',d:'La tortuga més gran del món, sense closca dura: té una pell gruixuda amb crestes al llarg de l\'esquena.',x:'Menja sobretot meduses. A la Costa Brava és molt rara i només se\'n veu alguna molt de tant en tant.',f:'p'},
+
+/* ---------- MAMÍFERS MARINS ---------- */
+{c:'mam',u:'dofi',s:'Tursiops truncatus',ca:'Dofí mular',es:'Delfín mular',p:[0,500],m:'Fins a 4 m',d:'Dofí gros i gris, de musell curt, que de vegades s\'acosta a la costa i als ports.',x:'Viu en grups i es comunica amb xiulets; cada individu té un xiulet propi, com un nom.',f:'p'},
+{c:'mam',u:'dofi',s:'Stenella coeruleoalba',ca:'Dofí ratllat',es:'Delfín listado',p:[0,500],m:'Fins a 2,5 m',d:'Dofí esvelt amb una franja fosca de l\'ull a la cua i el ventre blanc.',x:'És el dofí més abundant del Mediterrani occidental, però viu mar endins i es veu sobretot des de vaixell.',f:'p'},
+{c:'mam',u:'dofi',s:'Grampus griseus',ca:'Dofí de Risso',es:'Calderón gris',p:[0,1000],m:'Fins a 4 m',d:'Dofí de cap arrodonit sense musell, gris i ple de cicatrius blanques.',x:'Les cicatrius són mossegades d\'altres dofins i marques dels calamars que menja.',f:'p'},
+{c:'mam',u:'cet',s:'Balaenoptera physalus',ca:'Rorqual comú',es:'Rorcual común',p:[0,500],m:'Fins a 22 m',d:'La segona balena més gran del món, llarga i grisa, amb un esbufec alt i estret.',x:'A la primavera en passen per davant de la Costa Brava, sobretot mar endins.',f:'p'},
+{c:'mam',u:'cet',s:'Physeter macrocephalus',ca:'Catxalot',es:'Cachalote',p:[0,2000],m:'Fins a 18 m',d:'Cetaci de cap enorme i quadrat, amb un esbufec inclinat cap endavant.',x:'Es capbussa a més de mil metres per caçar calamars, sobretot a prop del canó submarí del Cap de Creus.',f:'p'}
 ];
 const PH={"Thalassoma pavo": [50972, "232940420/medium.jpg", "cc-by-nc", "Sylvain Le Bris"], "Coris julis": [50968, "244363348/medium.jpg", "cc-by-nc", "Luis P. B."], "Chromis chromis": [118682, "2587337/medium.jpg", "cc-by-nc", "whodden"], "Symphodus ocellatus": [113534, "49507615/medium.jpg", "cc-by-nc", "frahome"], "Symphodus mediterraneus": [113531, "248018599/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Labrus merula": [103912, "106145345/medium.jpg", "cc-by-nc", "josepvilanova"], "Labrus viridis": [103914, "225544984/medium.jpg", "cc-by-nc", "Bernat Espigulé"], "Serranus scriba": [118674, "244363364/medium.jpg", "cc-by-nc", "Luis P. B."], "Serranus cabrilla": [118675, "233629229/medium.jpeg", "cc-by-nc", "Benoît Segerer"], "Epinephelus marginatus": [100119, "576952820/medium.jpg", "cc-by-nc", "Billy Bensted-Smith"], "Epinephelus costae": [100091, "327115815/medium.jpg", "cc-by-nc", "Luis P. B."], "Diplodus sargus": [118669, "156153979/medium.jpg", "cc-by-nc", "Antoni López-Arenas i Cama"], "Diplodus vulgaris": [118667, "429699/medium.jpg", "cc-by", "Philippe Guillaume"], "Diplodus puntazzo": [53696, "87357945/medium.jpg", "cc-by", "Julien Renoult"], "Diplodus cervinus": [49984, "388323160/medium.jpeg", "cc-by-nc", "tim h"], "Diplodus annularis": [118665, "696023795/medium.jpg", "cc-by-nc", "Kai"], "Oblada melanura": [118662, "8074045/medium.jpg", "cc-by-nc", "whodden"], "Sparus aurata": [1494783, "720160884/medium.jpg", "cc-by-nc", "Marinko Babić"], "Spondyliosoma cantharus": [118655, "2647459/medium.jpg", "cc-by-nc", "whodden"], "Boops boops": [118664, "84254934/medium.jpg", "cc-by-nc", "josepvilanova"], "Spicara maena": [118711, "23623883/medium.jpg", "cc-by", "Julien Renoult"], "Dentex dentex": [118654, "2849891/medium.jpeg", "cc-by-sa", "Hectonichus"], "Sciaena umbra": [118683, "245156801/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Scorpaena scrofa": [84861, "240728995/medium.jpeg", "cc-by-nc", "luismartinezartola"], "Scorpaena porcus": [118631, "61740418/medium.jpg", "cc-by-nc", "josepvilanova"], "Muraena helena": [118590, "2563138/medium.jpg", "cc-by-nc", "whodden"], "Conger conger": [118589, "349125583/medium.jpg", "cc-by-nc", "Luis P. B."], "Phycis phycis": [118614, "148981607/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Apogon imberbis": [118514, "59585988/medium.jpeg", "cc-by-nc", "Daniela Kupschus"], "Anthias anthias": [118672, "99980581/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Tripterygion delaisi": [118642, "2566586/medium.jpg", "cc-by-nc", "whodden"], "Parablennius gattorugine": [118685, "477107/medium.jpg", "cc-by-nc", "Philippe Guillaume"], "Gobius cruentatus": [118702, "477066/medium.png", "cc-by", "Pierre Rouillan"], "Mullus surmuletus": [118619, "595809789/medium.jpg", "cc-by-nc", "Stamatis Zogaris"], "Chelon labrosus": [97345, "154956455/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Atherina hepsetus": [118595, "449181144/medium.jpg", "cc-by", "Julien Renoult"], "Trachinus draco": [118652, "108403403/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Echiichthys vipera": [118649, "170133104/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Uranoscopus scaber": [118641, "30005748/medium.jpg", "cc-by-nc", "whodden"], "Xyrichtys novacula": [115188, "160906095/medium.jpg", "cc-by", "Pauline Walsh Jacobson"], "Lithognathus mormyrus": [118660, "296313797/medium.jpg", "cc-by-nc", "Luis P. B."], "Pagellus erythrinus": [118659, "84255343/medium.jpg", "cc-by-nc", "josepvilanova"], "Bothus podas": [118640, "371142123/medium.jpeg", "cc-by-nc", "Frédéric ANDRE"], "Solea solea": [55396, "161931149/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Trachinotus ovatus": [51401, "164190171/medium.jpg", "cc-by-nc", "Luca Boscain"], "Lophius piscatorius": [118610, "133521176/medium.jpeg", "cc-by-nc", "luismartinezartola"], "Hippocampus guttulatus": [102821, "154810988/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Hippocampus hippocampus": [84969, "6144946/medium.jpg", "cc-by-nc", "Stefan"], "Syngnathus typhle": [118625, "162638902/medium.jpeg", "cc-by-nc-sa", "Pierre Corbrion"], "Sarpa salpa": [118663, "424954652/medium.jpg", "cc-by", "Guido and Carrara family"], "Symphodus tinca": [52554, "133600073/medium.jpg", "cc-by-nc", "luismartinezartola"], "Sardina pilchardus": [118600, "52936935/medium.jpg", "pd", "Etrusko25"], "Engraulis encrasicolus": [51910, "71402879/medium.jpg", "pd", "Etrusko25"], "Scomber scombrus": [118678, "434690152/medium.jpeg", "cc-by", "Ludovic Trochadero"], "Sarda sarda": [56940, "237419701/medium.jpg", "cc-by-nc", "Koaw Nature"], "Thunnus thynnus": [114126, "161933338/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Seriola dumerili": [51549, "300897123/medium.jpg", "cc-by-nc", "Luis P. B."], "Sphyraena viridensis": [47260, "61383857/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Belone belone": [118597, "376094344/medium.jpeg", "cc-by-nc", "giancarlo_torre"], "Coryphaena hippurus": [98531, "361046671/medium.jpg", "cc-by-nc", "Luis P. B."], "Mola mola": [49601, "216346730/medium.jpg", "cc-by-nc", "blacktip"], "Scyliorhinus canicula": [112372, "265483574/medium.jpg", "cc-by-nc", "Luis P. B."], "Prionace glauca": [110361, "358688436/medium.jpg", "cc-by-sa", "Patrick Doll"], "Dasyatis pastinaca": [47276, "265483902/medium.jpg", "cc-by-nc", "Luis P. B."], "Torpedo marmorata": [114244, "296434484/medium.jpg", "cc-by-nc", "Luis P. B."], "Myliobatis aquila": [49311, "445722347/medium.jpg", "cc-by-nc", "Le Gallais"], "Raja clavata": [48397, "460467478/medium.jpg", "cc-by-nc", "Ingo Rogalla"], "Pelagia noctiluca": [256089, "202114997/medium.jpg", "cc-by-nc", "Seawater"], "Rhizostoma pulmo": [319371, "189393640/medium.jpeg", "cc-by-nc", "xavi salvador costa"], "Cotylorhiza tuberculata": [324852, "245602105/medium.jpeg", "cc-by-nc", "Marek Koszorek"], "Aurelia aurita": [48328, "492583365/medium.jpg", "cc-by-nc", "Bianca Bahlert"], "Chrysaora hysoscella": [360314, "268410579/medium.jpg", "cc-by-nc", "Kostas Aristeidou"], "Carybdea marsupialis": [255959, "705177836/medium.jpg", "cc-by-nc", "Marinko Babić"], "Aequorea forskalea": [345076, "109121213/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Physalia physalis": [117302, "544306293/medium.jpg", "cc-by", "Jan Ebr & Ivana Ebrová"], "Velella velella": [59698, "362651247/medium.jpg", "cc-by-nc", "markc666"], "Porpita porpita": [59683, "455421962/medium.jpeg", "cc-by-nc", "Wildgreenfairy"], "Mnemiopsis leidyi": [180788, "9566101/medium.jpg", "cc-by-nc-sa", "Vidar@aqua-photos"], "Beroe ovata": [339903, "103124850/medium.jpeg", "cc-by-nc", "David Remsen"], "Leucothea multicornis": [708730, "111521934/medium.jpg", "cc-by-nc", "Bernat Garrigós"], "Salpa maxima": [800859, "78696567/medium.jpeg", "cc-by", "Chris Taklis"], "Pyrosoma atlanticum": [51108, "12095741/medium.jpeg", "cc-by-nc", "katgrom"], "Posidonia oceanica": [118943, "456503368/medium.jpg", "cc-by-nc", "Falk Viczian Solarboot-Projekte gGmbH"], "Cymodocea nodosa": [131135, "313645574/medium.jpeg", "cc-by-nc", "eduardmarques"], "Acetabularia acetabulum": [59704, "184359972/medium.jpg", "cc-by-nc", "Falk Viczian Solarboot-Projekte gGmbH"], "Halimeda tuna": [326163, "455708671/medium.jpeg", "cc-by-nc", "Sylvain Le Bris"], "Codium bursa": [118947, "232082882/medium.jpg", "cc-by-nc", "Sylvain Le Bris"], "Ulva lactuca": [67423, "412792345/medium.jpg", "cc-by-nc", "artzerphotog"], "Caulerpa cylindracea": [734863, "332723967/medium.jpg", "cc-by-nc", "Francesco Caroli"], "Padina pavonica": [1286606, "747338738/medium.jpg", "cc-by-nc", "cccrll"], "Dictyota dichotoma": [51024, "494882096/medium.jpeg", "cc-by-nc", "sandrinelecomte13"], "Sargassum vulgare": [322821, "666724/medium.jpg", "cc-by-nc-sa", "Valter Jacinto"], "Ericaria amentacea": [1183113, "447882842/medium.jpg", "cc-by-nc", "Daniel PAVON"], "Ellisolandia elongata": [461577, "48707910/medium.jpg", "cc-by-nc", "frahome"], "Lithophyllum byssoides": [785917, "117938778/medium.jpeg", "cc-by", "Charlène Selva"], "Peyssonnelia squamaria": [417197, "326941903/medium.jpeg", "cc-by-nc", "Frédéric ANDRE"], "Asparagopsis armata": [57779, "180355424/medium.jpg", "cc-by-nc", "Jean-Paul Cassez"], "Noctiluca scintillans": [468044, "233495738/medium.jpg", "cc-by-nc", "ryanderoo"], "Ostreopsis ovata": [891822, "39283436/medium.jpeg", "cc-by-nc", "Darrell Crisp"], "Alexandrium minutum": [203640, "26379172/medium.jpeg", "cc-by-nc-sa", "Sarka Martinez"], "Tripos": [607752, "248651422/medium.jpg", "cc-by-nc", "Ken Koll"], "Chaetoceros": [123862, "12959132/medium.jpeg", "cc-by-nc-sa", "Sarka Martinez"], "Pseudo-nitzschia": [326230, "756685/medium.jpg", "cc-by-nc", "glanglois"], "Emiliania huxleyi": [991143, "538375328/medium.jpg", "cc-by-nc", "Ian Cruickshank"], "Copepoda": [121643, "27854507/medium.jpeg", "cc-by-nc", "Joe Kunkel"], "Chaetognatha": [151827, "188735025/medium.jpg", "cc-by-nc", "Rafi Amar"], "Oikopleura": [485078, "93439357/medium.jpg", "cc-by-nc", "marathon_runners"], "Meganyctiphanes norvegica": [639178, "449434046/medium.jpg", "cc-by-sa", "Øystein Paulsen"]};
+Object.assign(PH,{"Octopus vulgaris":[49315,"177557549/medium.jpg","cc-by-nc","Kaila Wheatley Kornblum"],"Sepia officinalis":[151429,"61586337/medium.jpg","cc-by-nc","Bernat Garrigós"],"Pinna nobilis":[118945,"4562321/medium.jpeg","cc-by","Julien Renoult"],"Peltodoris atromaculata":[326343,"29643924/medium.jpg","cc-by-nc","jim-anderson"],"Paracentrotus lividus":[48032,"322561355/medium.jpeg","cc-by-nc","Sylvain Le Bris"],"Arbacia lixula":[143139,"53183622/medium.jpeg","cc-by","Chris Taklis"],"Echinaster sepositus":[117446,"172397639/medium.jpeg","cc-by-nc","Sylvain Le Bris"],"Holothuria tubulosa":[324819,"464474135/medium.jpeg","cc-by-nc","Roberto Pillon"],"Anemonia viridis":[118895,"21918473/medium.jpeg","cc-by-nc","Gonzalo Mucientes Sandoval"],"Actinia equina":[130085,"60993449/medium.jpeg","cc-by-nc","Stefan"],"Paramuricea clavata":[338005,"555948987/medium.jpg","cc-by-nc","Frédéric ANDRE"],"Eunicella singularis":[548467,"78276752/medium.jpg","cc-by-nc","Bernat Garrigós"],"Corallium rubrum":[483326,"172980207/medium.jpeg","cc-by-nc","Sylvain Le Bris"],"Palinurus elephas":[324536,"36636590/medium.jpg","cc-by-nc","Albertini maridom"],"Pachygrapsus marmoratus":[59283,"31056797/medium.jpg","cc-by-nc","Paolo Mazzei"],"Dardanus calidus":[342258,"4510115/medium.jpg","cc-by-nc","luca tringali"],"Sabella spallanzanii":[338012,"711406927/medium.jpg","cc-by-nc-sa","John Turnbull"],"Caretta caretta":[39665,"176772831/medium.jpeg","cc-by-nc","Roberto Pillon"],"Dermochelys coriacea":[39677,"244918310/medium.jpg","cc-by-nc","azure27014"],"Tursiops truncatus":[41482,"611231392/medium.jpg","cc-by-nc","Frank Krasovec"],"Stenella coeruleoalba":[41494,"66285/medium.jpg","cc-by-nc-sa","Alfiero Brisotto"],"Grampus griseus":[41541,"142809664/medium.jpg","cc-by-nc","Robin Gwen Agarwal"],"Balaenoptera physalus":[41562,"206941766/medium.jpg","cc-by-sa","Cephas"],"Physeter macrocephalus":[74890,"255460036/medium.jpg","cc-by-nc","Wayne and Pam Osborn"]});
 SP.forEach((x,i)=>{x.id=i;x.ph=PH[x.s]});
 
 /* ---------- Zones de la Costa Brava ---------- */
@@ -437,12 +477,18 @@ const OV={
  'Ericaria amentacea':{creus:3,portbou:2,medes:2,begur:2,palafrugell:2,tossa:2,roses:0,pals:0,'*':1},
  'Peyssonnelia squamaria':{medes:3,creus:2,begur:2,'*':1},
  'Ostreopsis ovata':{roses:1,pals:1,'*':2},'Alexandrium minutum':{roses:2,palamos:2,blanes:2,'*':1},
- 'Meganyctiphanes norvegica':{creus:3,palamos:2,'*':1},'Emiliania huxleyi':{'*':1},'Noctiluca scintillans':{'*':2}
+ 'Meganyctiphanes norvegica':{creus:3,palamos:2,'*':1},'Emiliania huxleyi':{'*':1},'Noctiluca scintillans':{'*':2},
+ 'Pinna nobilis':{'*':1},'Palinurus elephas':RES,'Corallium rubrum':{medes:3,creus:3,begur:2,'*':1},
+ 'Paramuricea clavata':{medes:3,creus:3,begur:2,tossa:2,'*':1},'Eunicella singularis':{medes:3,creus:2,begur:2,montgo:2,tossa:2,'*':1},
+ 'Caretta caretta':{'*':1},'Dermochelys coriacea':{'*':1},
+ 'Tursiops truncatus':{'*':1},'Stenella coeruleoalba':{'*':1},'Grampus griseus':{creus:1,palamos:1,'*':0},
+ 'Balaenoptera physalus':{'*':1},'Physeter macrocephalus':{creus:1,palamos:1,'*':0}
 };
-const SUBHAB={roca:'roca',sorra:'sorra',pos:'pos',obert:'obert',cart:'sorra',fanero:'pos',verda:'roca',bruna:'roca',vermella:'roca'};
+const SUBHAB={roca:'roca',sorra:'sorra',pos:'pos',obert:'obert',cart:'sorra',fanero:'pos',verda:'roca',bruna:'roca',vermella:'roca',
+  mol:'roca',equi:'roca',cnid:'roca',crust:'roca',cuc:'sorra',tort:'obert',dofi:'obert',cet:'obert'};
 function freq(x,z){const o=OV[x.s];if(o){if(o[z]!=null)return o[z];if(o['*']!=null)return o['*']}
   if(x.c==='medusa'||x.c==='planc')return 2;
-  return ZONES[z].pr[SUBHAB[x.u]]??1}
+  return ZONES[z].pr[x.h||SUBHAB[x.u]]??1}
 const FQ=['No hi és','Ocasional','Habitual','Freqüent'];
 
 /* ---------- Mapa SVG ---------- */
@@ -493,7 +539,7 @@ function drawCats(){
 }
 function drawChips(){
   const cat=CATS[state.c];
-  if(!cat.sub){$('#chips').innerHTML='';return}
+  if(!cat.sub||Object.keys(cat.sub).length<2){$('#chips').innerHTML='';return}
   const n={};SP.filter(x=>x.c===state.c).forEach(x=>n[x.u]=(n[x.u]||0)+1);
   $('#chips').innerHTML=`<button class="chip" data-u="" aria-pressed="${state.u===''}">Totes<span class="c">${Object.values(n).reduce((a,b)=>a+b,0)}</span></button>`+
     Object.entries(cat.sub).map(([k,v])=>`<button class="chip" data-u="${k}" aria-pressed="${state.u===k}">${v}<span class="c">${n[k]||0}</span></button>`).join('');
