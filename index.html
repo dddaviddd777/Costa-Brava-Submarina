@@ -3,6 +3,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Costa Brava Submarina</title>
+<meta name="description" content="Guia de camp de la fauna i la flora submarina de la Costa Brava, de Portbou a Blanes.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="CB Submarina">
+<meta name="theme-color" content="#0B7C80" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#05343A" media="(prefers-color-scheme: dark)">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -56,7 +64,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .catintro b{color:var(--ink);font-family:var(--f-display)}
 
 /* Mapa */
-.layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:22px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(280px,400px) minmax(0,1fr);gap:22px;align-items:start}
 .mapbox{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px}
 .maphead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .maphead b{font-family:var(--f-display);font-size:16px}
@@ -65,7 +73,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .map{width:100%;height:auto;display:block;max-height:68vh}
 .map .sea{fill:var(--sea)}
 .map .land{fill:var(--land);stroke:var(--coast);stroke-width:2;stroke-linejoin:round}
-.map .lbl{font-family:var(--f-display);font-size:21px;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:5px;stroke-linejoin:round}
+.map .lbl{font-family:var(--f-display);font-size:23px;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:5px;stroke-linejoin:round}
 .map .lbl.sel{font-weight:800;fill:var(--accent)}
 .map .ghost{font-family:var(--f-mono);font-size:18px;fill:var(--muted);letter-spacing:.15em}
 .map .zone{cursor:pointer}
@@ -96,11 +104,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .where li b{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
 @media (max-width:860px){
   .layout{grid-template-columns:1fr}
-  .mapbox{position:static;grid-template-columns:minmax(0,200px) 1fr;align-items:start}
-  .mapbox .maphead,.mapbox .legend,.mapbox .mapnote{grid-column:1/-1}
+  /* Mapa a tota l'amplada i text a sota (abans el mapa quedava en una columna de 150-200 px) */
+  .mapbox{position:static;grid-template-columns:1fr}
+  #mapwrap{width:100%;max-width:480px;margin-inline:auto}
   .map{max-height:none}
 }
-@media (max-width:460px){.where{grid-template-columns:120px 1fr}.mapbox{grid-template-columns:150px 1fr}}
+@media (max-width:460px){.where{grid-template-columns:120px 1fr}}
 
 .controls{display:grid;gap:12px;margin-bottom:6px}
 .searchrow{display:flex;gap:10px;flex-wrap:wrap}
@@ -665,4 +674,8 @@ $('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeSheet
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#overlay').hidden)closeSheet()});
 
 drawCats();drawChips();drawMap();drawGrid();
+
+/* Aplicació instal·lable: registra el service worker (només funciona servit per https o localhost) */
+if('serviceWorker' in navigator&&location.protocol!=='file:')
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
